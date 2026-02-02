@@ -1,189 +1,302 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2489/2489756.png">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بۆرسەی زێڕ | دۆلار و دینار</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بۆرسەی زێڕ | Pro</title>
     <style>
-        :root {
-            --gold: #d4af37; --bg: #0d0d0d; --card: #1a1a1a;
-            --input-bg: #000; --text: #fff; --up: #00ff88; --down: #ff4d4d;
+        :root { 
+            --gold: #d4af37; --gold-light: #ffcc33; --bg: #0d0d0d; 
+            --card: #1a1a1a; --input-bg: #000; --text: #fff; 
+            --up: #00ff88; --down: #ff4d4d; --freeze: #00d4ff; 
+        }
+        .light-mode { --bg: #f5f5f5; --card: #ffffff; --input-bg: #f0f0f0; --text: #333; }
+        
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; min-height: 100vh; transition: 0.3s; overflow-x: hidden; }
+        
+        .box { 
+            background: var(--card); padding: 20px; border-radius: 25px; width: 100%; max-width: 380px; 
+            border: 1px solid rgba(212, 175, 55, 0.2); position: relative; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; }
-        .box { background: var(--card); padding: 25px; border-radius: 30px; width: 100%; max-width: 420px; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.7); }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h2 { color: var(--gold); margin: 0; font-size: 26px; }
+        #menu-toggle {
+            position: absolute; right: 15px; top: 15px; background: none; border: none; 
+            color: var(--gold); font-size: 24px; cursor: pointer; z-index: 1001;
+        }
+        .sidebar {
+            position: fixed; top: 0; right: -280px; width: 250px; height: 100%;
+            background: var(--card); border-left: 1px solid var(--gold);
+            transition: 0.4s; z-index: 1000; padding: 60px 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        }
+        .sidebar.active { right: 0; }
         
-        .api-status { font-size: 10px; color: #555; margin-top: 5px; cursor: pointer; border: 1px solid #333; display: inline-block; padding: 2px 8px; border-radius: 10px; transition: 0.3s; }
-        .api-status:active { transform: scale(0.95); background: #222; }
+        /* --- Styles for Dropdowns --- */
+        .menu-dropdown {
+            margin-top: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        .dropdown-header-btn {
+            width: 100%; padding: 12px; background: #222; color: var(--gold);
+            border: none; cursor: pointer; font-weight: bold; text-align: center;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            outline: none;
+        }
+        .dropdown-list { display: none; padding: 5px; background: rgba(0,0,0,0.2); }
+        .dropdown-list.show { display: block; }
+        
+        .sub-btn {
+            display: block; width: 100%; padding: 10px; margin-bottom: 5px;
+            background: transparent; border: 1px solid transparent; color: white; 
+            border-radius: 8px; cursor: pointer; text-align: center; font-size: 14px;
+        }
+        .sub-btn:hover { background: rgba(212, 175, 55, 0.1); border-color: var(--gold); }
+        .sub-btn.active-item { border-color: var(--up); color: var(--up); }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .header h2 { color: var(--gold); text-align: center; margin: 0; font-size: 24px; font-weight: 800; }
+        .live-clock { font-size: 12px; color: #666; text-align: center; margin: 5px 0 15px; }
+
+        .status-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-live { background: var(--gold); color: #000; font-weight: bold; padding: 6px 14px; border-radius: 12px; font-size: 12px; cursor: pointer; border: none; transition: 0.3s; }
+        
+        .market-btn { display: flex; align-items: center; gap: 6px; background: rgba(128,128,128,0.1); padding: 6px 12px; border-radius: 12px; border: 1px solid #333; cursor: pointer; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-open { background: var(--up); box-shadow: 0 0 8px var(--up); }
+        .dot-closed { background: var(--down); box-shadow: 0 0 8px var(--down); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
         .full-width { grid-column: span 2; }
-        label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 12px; background: var(--input-bg); color: #fff; font-size: 16px; text-align: center; outline: none; box-sizing: border-box; }
-        input:focus { border-color: var(--gold); }
+        label { display: block; font-size: 11px; color: #888; margin-bottom: 4px; padding-right: 5px; }
+        input, select { 
+            width: 100%; padding: 12px; border: 1px solid #333; border-radius: 15px; 
+            background: var(--input-bg); color: var(--text); font-size: 15px; 
+            text-align: center; outline: none; box-sizing: border-box; transition: 0.3s;
+        }
 
-        .results { border-radius: 20px; overflow: hidden; background: rgba(0,0,0,0.3); }
-        .row { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #222; }
-        .row.active { background: rgba(212, 175, 55, 0.1); border-right: 4px solid var(--gold); }
+        .quick-conv {
+            background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 18px;
+            margin-bottom: 15px; border: 1px solid #222;
+        }
+        .conv-inputs { display: flex; gap: 8px; align-items: center; }
+        .conv-inputs input { padding: 8px; font-size: 13px; border-radius: 10px; }
+
+        .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
+        .res-card { 
+            background: rgba(128,128,128,0.05); padding: 12px 5px; border-radius: 15px; 
+            text-align: center; border: 1px solid #333; 
+        }
+        .res-card.highlight { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
+        .res-label { display: block; font-size: 10px; color: var(--gold); margin-bottom: 5px; }
+        .res-iqd { display: block; font-weight: bold; font-size: 13px; margin-bottom: 2px; }
+        .res-usd { display: block; font-size: 10px; color: #777; }
+
+        .alert-section {
+            background: rgba(0, 212, 255, 0.05); padding: 10px; border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .alert-input { padding: 8px; border-radius: 10px; font-size: 13px; flex-grow: 1; }
+
+        .calc-section { 
+            background: rgba(212, 175, 55, 0.03); padding: 15px; border-radius: 20px; 
+            border: 1px dashed rgba(212, 175, 55, 0.3); margin-top: 10px;
+        }
+        .weight-info { font-size: 11px; color: var(--gold); text-align: center; margin-top: 8px; display: block; font-weight: 500; }
         
-        .price-container { text-align: left; display: flex; flex-direction: column; align-items: flex-end; }
-        .val-iqd { font-family: 'Consolas', monospace; font-size: 16px; font-weight: bold; transition: color 0.5s; }
-        .val-usd { font-family: 'Consolas', monospace; font-size: 13px; color: var(--gold); opacity: 0.8; margin-top: 2px; }
+        .total-box { 
+            text-align: center; margin-top: 12px; background: #000; padding: 15px; 
+            border-radius: 15px; border: 1px solid var(--up); position: relative; 
+        }
+        .currency-toggle { position: absolute; left: 10px; top: 15px; background: #222; border: 1px solid #444; color: var(--text); border-radius: 8px; padding: 6px; cursor: pointer; font-size: 14px; }
 
-        .trend-up { color: var(--up) !important; }
-        .trend-down { color: var(--down) !important; }
+        .btn-share { 
+            background: rgba(0, 255, 136, 0.1); color: var(--up); border: 1px solid var(--up); 
+            border-radius: 10px; padding: 5px 10px; font-size: 11px; cursor: pointer; 
+            margin-top: 10px; width: 100%; transition: 0.3s;
+        }
+        .btn-share:active { background: var(--up); color: #000; }
 
-        .share-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-gold { background: var(--gold); color: #000; }
-        .btn-outline { background: #333; color: var(--gold); }
+        .price-change { font-size: 10px; margin-right: 5px; font-weight: bold; }
+        
+        .days-modal { display: none; position: absolute; top: 80px; left: 20px; right: 20px; background: var(--card); border: 2px solid var(--gold); padding: 20px; border-radius: 20px; z-index: 100; box-shadow: 0 10px 40px rgba(0,0,0,0.9); }
+        .days-modal.active { display: block; }
+        .freeze-btn { background: #333; border: 1px solid var(--freeze); color: var(--freeze); border-radius: 10px; font-size: 11px; padding: 6px 12px; cursor: pointer; margin-left: 5px; }
+        .freeze-active { background: var(--freeze); color: #000; font-weight: bold; }
+        .history-box { margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; max-height: 120px; overflow-y: auto; }
+        .history-item { font-size: 11px; padding: 8px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
+<button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+<div id="sidebar" class="sidebar">
+    <h3 data-key="settings" style="color:var(--gold); text-align: center;">ڕێکخستنەکان</h3>
+    
+    <div class="menu-dropdown">
+        <button class="dropdown-header-btn" onclick="toggleDropdown('langList')">
+            🌐 <span data-key="languages_btn">زمانەکان</span>
+        </button>
+        <div id="langList" class="dropdown-list">
+            <button class="sub-btn" onclick="changeLanguage('ku')">کوردی</button>
+            <button class="sub-btn" onclick="changeLanguage('ar')">العربية</button>
+            <button class="sub-btn" onclick="changeLanguage('en')">English</button>
+            <button class="sub-btn" onclick="changeLanguage('tr')">Türkçe</button>
+        </div>
+    </div>
+
+    <div class="menu-dropdown">
+        <button class="dropdown-header-btn" onclick="toggleDropdown('soundList')">
+            🔔 <span data-key="sounds_btn">دەنگەکان</span>
+        </button>
+        <div id="soundList" class="dropdown-list">
+            <button class="sub-btn" id="s1" onclick="changeSound(1, true)">زەنگی یەکەم</button>
+            <button class="sub-btn" id="s2" onclick="changeSound(2, true)">زەنگی دووەم</button>
+            <button class="sub-btn" id="s3" onclick="changeSound(3, true)">زەنگی سێیەم</button>
+        </div>
+    </div>
+
+    <button onclick="toggleSidebar()" data-key="close" style="margin-top: 30px; width: 100%; padding: 12px; border-radius: 12px; background: var(--gold); border: none; font-weight: bold; cursor:pointer;">داخستن</button>
+</div>
+
 <div class="box">
-    <div class="header">
-        <h2>بۆرسەی کوردستان</h2>
-        <p id="live-clock" style="font-size: 12px; color: #666; margin: 5px 0;">--:--:--</p>
-        <div id="api-btn" class="api-status" onclick="fetchGoldPrice()">نوێکردنەوەی نرخ (Live) 🔄</div>
+    <button onclick="document.body.classList.toggle('light-mode')" style="position:absolute; left:15px; top:15px; background:none; border:none; cursor:pointer; font-size:18px;">🌓</button>
+    <div class="header"><h2 data-key="title">بۆرسەی زێڕ</h2></div>
+    <p id="live-clock" class="live-clock">--:--:--</p>
+    
+    <div class="status-bar">
+        <button id="live-btn" class="btn-live" onclick="fetchGoldPrice()">Live 🔴</button>
+        <div style="display: flex; gap: 5px; align-items: center;">
+            <button id="freeze-btn" class="freeze-btn" onclick="toggleFreeze()" data-key="freeze">❄️ بەستن</button>
+            <div class="market-btn" onclick="document.getElementById('daysModal').classList.toggle('active')">
+                <div id="status-dot" class="status-dot"></div>
+                <span id="market-text" data-key="market" style="font-size: 12px;">بۆرسە</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="quick-conv">
+        <label data-key="quick_conv_label" style="text-align: center; display: block; margin-bottom: 8px; font-size: 10px; color: var(--gold);">گۆڕینەوەی خێرا (دۆلار ⇄ دینار)</label>
+        <div class="conv-inputs">
+            <input type="number" id="quick-usd" placeholder="$" oninput="convertQuick('usd')">
+            <span style="font-size: 12px;">⇄</span>
+            <input type="number" id="quick-iqd" placeholder="د.ک" oninput="convertQuick('iqd')">
+        </div>
+    </div>
+
+    <div class="alert-section">
+        <label data-key="alert_me" style="color: var(--freeze); margin: 0; font-size: 10px;">ئاگادارم بکە لە:</label>
+        <input type="number" id="alert-price" class="alert-input" placeholder="...">
+        <span id="alert-status" style="font-size: 14px;">🔔</span>
+    </div>
+
+    <div id="daysModal" class="days-modal">
+        <div data-key="market_schedule" style="text-align: center; color: var(--gold); font-size: 15px; font-weight: bold; margin-bottom: 15px;">خشتەی بۆرسەی جیهانی</div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #333;"><span data-key="mon_fri">دووشەممە - هەینی</span> <span data-key="open" style="color:var(--up)">کراوەیە</span></div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0;"><span data-key="sat_sun">شەممە - یەکشەممە</span> <span data-key="closed" style="color:var(--down)">داخراوە</span></div>
+        <button onclick="document.getElementById('daysModal').classList.remove('active')" data-key="close" style="width: 100%; margin-top: 15px; background: var(--gold); border: none; border-radius: 12px; cursor: pointer; padding: 10px; font-weight: bold;">داخستن</button>
     </div>
 
     <div class="grid">
-        <div>
-            <label>ئۆنسە ($)</label>
-            <input type="number" id="ounce" step="any" oninput="update()">
-        </div>
-        <div>
-            <label>١٠٠ دۆلار (دینار)</label>
-            <input type="number" id="dollar" step="any" oninput="update()">
-        </div>
+        <div><label><span data-key="ounce_label">ئۆنسە</span> <span id="trend"></span><span id="diff-val" class="price-change"></span></label><input type="number" id="ounce" step="0.01" oninput="update()"></div>
+        <div><label data-key="dollar_label">١٠٠ دۆلار</label><input type="number" id="dollar" oninput="autoPremium(); convertQuick('usd')"></div>
         <div class="full-width">
-            <label>حەواڵە/مەسرەف ($)</label>
-            <input type="number" id="premium" value="81" oninput="update()">
+            <label data-key="premium_label">مەسرەف + حەواڵە ($)</label>
+            <input type="number" id="premium" oninput="update()">
         </div>
     </div>
 
     <div class="results">
-        <div class="row">
-            <span>عەیار ٢٤:</span>
-            <div class="price-container">
-                <span class="val-iqd" id="v24-iqd">0 د.ک</span>
-                <span class="val-usd" id="v24-usd">$0.00</span>
-            </div>
+        <div class="res-card"><span class="res-label" data-key="v24">عەیار ٢٤</span><span class="res-iqd" id="v24-iqd">0</span><span class="res-usd" id="v24-usd">$0</span></div>
+        <div class="res-card highlight"><span class="res-label" data-key="v21">عەیار ٢١</span><span class="res-iqd" id="v21-iqd">0</span><span class="res-usd" id="v21-usd">$0</span></div>
+        <div class="res-card"><span class="res-label" data-key="v18">عەیار ١٨</span><span class="res-iqd" id="v18-iqd">0</span><span class="res-usd" id="v18-usd">$0</span></div>
+    </div>
+
+    <div class="calc-section">
+        <div class="grid" style="margin: 0; gap: 8px;">
+            <div><label data-key="gram">گرام</label><input type="number" id="g-weight" placeholder="0" oninput="update()"></div>
+            <div><label data-key="mithqal">مسقاڵ</label><input type="number" id="m-weight" placeholder="0" oninput="update()"></div>
+            <div><label data-key="wage">حەق دەست</label><input type="number" id="work-cost" value="0" oninput="update()"></div>
+            <div><label data-key="karat">عەیار</label><select id="calc-karat" onchange="update()"><option value="1">٢٤</option><option value="0.875" selected>٢١</option><option value="0.75">١٨</option></select></div>
         </div>
-        <div class="row active">
-            <span style="color: var(--gold); font-weight: bold;">عەیار ٢١:</span>
-            <div class="price-container">
-                <span class="val-iqd" id="v21-iqd">0 د.ک</span>
-                <span class="val-usd" id="v21-usd">$0.00</span>
-            </div>
-        </div>
-        <div class="row">
-            <span>عەیار ١٨:</span>
-            <div class="price-container">
-                <span class="val-iqd" id="v18-iqd">0 د.ک</span>
-                <span class="val-usd" id="v18-usd">$0.00</span>
-            </div>
+        <span id="weight-detail" class="weight-info">...</span>
+        <div class="total-box">
+            <button class="currency-toggle" onclick="toggleCurrency()">⇄</button>
+            <span id="total-val" style="color:var(--up); font-size: 20px; font-weight: bold;">0 د.ک</span>
+            <button class="btn-share" onclick="shareResult()" data-key="share">📤 هاوبەشکردنی نرخ</button>
+            <div onclick="addToHistory()" data-key="save" style="margin-top: 12px; color:#666; font-size:10px; cursor:pointer; text-decoration: underline;">➕ پاشەکەوت بکە</div>
         </div>
     </div>
 
-    <div class="share-group">
-        <button class="btn btn-gold" onclick="copyRates()">کۆپی نرخ 📋</button>
-        <button class="btn btn-outline" onclick="resetDefaults()">Reset 🔄</button>
+    <div id="history-container" class="history-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span data-key="history_list" style="font-size:10px; color:#888;">لیستی پاشەکەوت:</span><button onclick="clearHistory()" data-key="clear" style="background:none; border:none; color:var(--down); font-size:9px; cursor:pointer;">سڕینەوە</button></div>
+        <div id="history-list"></div>
     </div>
 </div>
 
 <script>
-    let lastM21 = 0;
+    let isFrozen = false;
+    let showInDollar = false;
+    let currentTotalIQD = 0;
+    let lastPrice = 0;
+    let currentLang = 'ku';
+    let selectedSound = 1;
 
-    async function fetchGoldPrice() {
-        const btn = document.getElementById('api-btn');
-        btn.innerText = "خەریکی وەرگرتنە...";
-        try {
-            const response = await fetch('https://api.gold-api.com/api/v1/gold');
-            const data = await response.json();
-            if(data && data.price) {
-                document.getElementById('ounce').value = data.price.toFixed(2);
-                update();
-                btn.innerText = "نوێکرایەوە ✅";
-            }
-        } catch (e) { btn.innerText = "هەڵە ❌"; }
-        setTimeout(() => btn.innerText = "نوێکردنەوەی نرخ (Live) 🔄", 2000);
-    }
-
-    function update() {
-        const ounce = parseFloat(document.getElementById('ounce').value) || 0;
-        const dollar = parseFloat(document.getElementById('dollar').value) || 0;
-        const premium = parseFloat(document.getElementById('premium').value) || 0;
-
-        localStorage.setItem('data', JSON.stringify({ounce, dollar, premium}));
-
-        if (ounce > 0 && dollar > 0) {
-            const priceInUSD = (ounce + premium) / 31.10347 * 5; 
-            const m24_usd = priceInUSD;
-            const m21_usd = m24_usd * 0.875;
-            const m18_usd = m24_usd * 0.75;
-
-            // هەژمارکردنی دینار
-            const exchangeRate = dollar / 100;
-            const m24_iqd = m24_usd * exchangeRate;
-            const m21_iqd = m21_usd * exchangeRate;
-            const m18_iqd = m18_usd * exchangeRate;
-
-            // Trend indicator
-            handleTrend('v21-iqd', m21_iqd, lastM21);
-            lastM21 = m21_iqd;
-
-            // نیشاندان لە شاشە
-            display('v24', m24_iqd, m24_usd);
-            display('v21', m21_iqd, m21_usd);
-            display('v18', m18_iqd, m18_usd);
-        }
-    }
-
-    function display(id, iqd, usd) {
-        document.getElementById(id + '-iqd').innerText = (Math.round(iqd / 250) * 250).toLocaleString() + " د.ک";
-        document.getElementById(id + '-usd').innerText = "$" + usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    }
-
-    function handleTrend(id, newVal, oldVal) {
-        const el = document.getElementById(id);
-        if (oldVal > 0) {
-            el.classList.remove('trend-up', 'trend-down');
-            if (newVal > oldVal) el.classList.add('trend-up');
-            else if (newVal < oldVal) el.classList.add('trend-down');
-            setTimeout(() => el.classList.remove('trend-up', 'trend-down'), 1000);
-        }
-    }
-
-    function copyRates() {
-        const t = `📊 نرخەکانی زێڕ:\nعەیار ٢١: ${document.getElementById('v21-iqd').innerText} (${document.getElementById('v21-usd').innerText})\nبۆرسەی کوردستان`;
-        navigator.clipboard.writeText(t);
-        alert("کۆپی کرا!");
-    }
-
-    function resetDefaults() { if(confirm("دڵنیای؟")) { localStorage.clear(); location.reload(); } }
-
-    setInterval(() => { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-GB'); }, 1000);
-
-    window.onload = () => {
-        const saved = JSON.parse(localStorage.getItem('data'));
-        if(saved) {
-            document.getElementById('ounce').value = saved.ounce;
-            document.getElementById('dollar').value = saved.dollar;
-            document.getElementById('premium').value = saved.premium;
-        } else {
-            document.getElementById('ounce').value = "2350";
-            document.getElementById('dollar').value = "150000";
-        }
-        update();
-        fetchGoldPrice();
+    const translations = {
+        ku: { title: "بۆرسەی زێڕ", settings: "ڕێکخستنەکان", languages_btn: "زمانەکان", sounds_btn: "دەنگەکان", close: "داخستن", freeze: "❄️ بەستن", market: "بۆرسە", quick_conv_label: "گۆڕینەوەی خێرا (دۆلار ⇄ دینار)", alert_me: "ئاگادارم بکە لە:", market_schedule: "خشتەی بۆرسەی جیهانی", mon_fri: "دووشەممە - هەینی", sat_sun: "شەممە - یەکشەممە", open: "کراوەیە", closed: "داخراوە", ounce_label: "ئۆنسە", dollar_label: "١٠٠ دۆلار", premium_label: "مەسرەف + حەواڵە ($)", v24: "عەیار ٢٤", v21: "عەیار ٢١", v18: "عەیار ١٨", gram: "گرام", mithqal: "مسقاڵ", wage: "حەق دەست", karat: "عەیار", share: "📤 هاوبەشکردنی نرخ", save: "➕ پاشەکەوت بکە", history_list: "لیستی پاشەکەوت:", clear: "سڕینەوە", mithqal_unit: "مسقاڵ", nod_unit: "نۆد", frozen_msg: "✅ بەستراوە" },
+        ar: { title: "بورصة الذهب", settings: "الإعدادات", languages_btn: "اللغات", sounds_btn: "الأصوات", close: "إغلاق", freeze: "❄️ تجميد", market: "البورصة", quick_conv_label: "تحويل سريع (دولار ⇄ دينار)", alert_me: "نبهني عند:", market_schedule: "جدول البورصة العالمية", mon_fri: "الأثنين - الجمعة", sat_sun: "السبت - الأحد", open: "مفتوح", closed: "مغلق", ounce_label: "أونصة", dollar_label: "١٠٠ دولار", premium_label: "مصرف + حوالة ($)", v24: "عيار ٢٤", v21: "عيار ٢١", v18: "عيار ١٨", gram: "جرام", mithqal: "مثقال", wage: "أجور الصياغة", karat: "عيار", share: "📤 مشاركة السعر", save: "➕ حفظ النتائج", history_list: "سجل المحفوظات:", clear: "مسح", mithqal_unit: "مثقال", nod_unit: "نود", frozen_msg: "✅ متجمد" },
+        en: { title: "Gold Exchange", settings: "Settings", languages_btn: "Languages", sounds_btn: "Sounds", close: "Close", freeze: "❄️ Freeze", market: "Market", quick_conv_label: "Quick Conv (USD ⇄ IQD)", alert_me: "Alert me at:", market_schedule: "Global Market Schedule", mon_fri: "Mon - Fri", sat_sun: "Sat - Sun", open: "Open", closed: "Closed", ounce_label: "Ounce", dollar_label: "$100 Rate", premium_label: "Premium + Transfer ($)", v24: "Karat 24", v21: "Karat 21", v18: "Karat 18", gram: "Gram", mithqal: "Mithqal", wage: "Work Cost", karat: "Karat", share: "📤 Share Price", save: "➕ Save Result", history_list: "History:", clear: "Clear", mithqal_unit: "Mithqal", nod_unit: "Nod", frozen_msg: "✅ Frozen" },
+        tr: { title: "Altın Borsası", settings: "Ayarlar", languages_btn: "Diller", sounds_btn: "Sesler", close: "Kapat", freeze: "❄️ Dondur", market: "Borsa", quick_conv_label: "Hızlı Dönüştür (USD ⇄ IQD)", alert_me: "Beni uyar:", market_schedule: "Küresel Borsa Takvimi", mon_fri: "Pazartesi - Cuma", sat_sun: "Cumartesi - Pazar", open: "Açık", closed: "Kapalı", ounce_label: "Ons", dollar_label: "$100 Kuru", premium_label: "Masraf + Havale ($)", v24: "24 Ayar", v21: "21 Ayar", v18: "18 Ayar", gram: "Gram", mithqal: "Miskal", wage: "İşçilik", karat: "Ayar", share: "📤 Fiyatı Paylaş", save: "➕ Kaydet", history_list: "Kayıt Geçmişi:", clear: "Temizle", mithqal_unit: "Miskal", nod_unit: "Nod", frozen_msg: "✅ Donduruldu" }
     };
-</script>
-</body>
-</html>
+
+    function toggleDropdown(id) {
+        const list = document.getElementById(id);
+        const isOpen = list.classList.contains('show');
+        document.querySelectorAll('.dropdown-list').forEach(d => d.classList.remove('show'));
+        if(!isOpen) list.classList.add('show');
+    }
+
+    function toggleSidebar() { 
+        document.getElementById('sidebar').classList.toggle('active'); 
+        if(!document.getElementById('sidebar').classList.contains('active')) {
+            document.querySelectorAll('.dropdown-list').forEach(d => d.classList.remove('show'));
+        }
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        document.documentElement.lang = lang;
+        document.documentElement.dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
+        const elements = document.querySelectorAll('[data-key]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-key');
+            if (translations[lang][key]) el.innerText = translations[lang][key];
+        });
+        update();
+        toggleSidebar();
+    }
+
+    function changeSound(id, preview = false) {
+        selectedSound = id;
+        document.querySelectorAll('#soundList .sub-btn').forEach(b => b.classList.remove('active-item'));
+        document.getElementById('s' + id).classList.add('active-item');
+        if(preview) playAlertSound();
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playAlertSound() {
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        if(selectedSound === 1) {
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+        } else if(selectedSound === 2) {
+            oscillator.type = 'square';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+        } else {
+            oscillator.type = 'triangle';
+         
