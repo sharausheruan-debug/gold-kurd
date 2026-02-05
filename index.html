@@ -1,302 +1,1325 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html id="htmlTag" lang="ku" dir="rtl">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بۆرسەی زێڕ | Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chen Hsong Multi-Language Guide</title>
     <style>
-        :root { 
-            --gold: #d4af37; --gold-light: #ffcc33; --bg: #0d0d0d; 
-            --card: #1a1a1a; --input-bg: #000; --text: #fff; 
-            --up: #00ff88; --down: #ff4d4d; --freeze: #00d4ff; 
-        }
-        .light-mode { --bg: #f5f5f5; --card: #ffffff; --input-bg: #f0f0f0; --text: #333; }
+        :root { --gold: #d4af37; --bg: #0d0d0d; --card: #1a1a1a; --text: #fff; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); margin: 0; transition: 0.3s; }
         
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; min-height: 100vh; transition: 0.3s; overflow-x: hidden; }
+        /* بەشی سەرەوە - Navbar */
+        .navbar { 
+            background: var(--card); 
+            padding: 15px; 
+            display: flex; 
+            align-items: center; 
+            border-bottom: 2px solid var(--gold); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1001; 
+        }
+
+        /* لێرەدا دیاری دەکەین مێنۆکە لای ڕاست بێت یان چەپ */
+        [dir="rtl"] .navbar { flex-direction: row; } /* لە ڕاستەوە بۆ چەپ: مێنۆ یەکەمە */
+        [dir="ltr"] .navbar { flex-direction: row; } /* لە چەپەوە بۆ ڕاست: مێنۆ یەکەمە لە لای چەپ */
+
+        .nav-title { font-weight: bold; color: var(--gold); font-size: 18px; flex-grow: 1; text-align: center; }
+        .menu-icon { color: var(--gold); font-size: 30px; cursor: pointer; user-select: none; padding: 0 10px; }
         
-        .box { 
-            background: var(--card); padding: 20px; border-radius: 25px; width: 100%; max-width: 380px; 
-            border: 1px solid rgba(212, 175, 55, 0.2); position: relative; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
+        /* مێنۆی لایەنی */
+        .side-menu { 
+            display: none; 
+            position: fixed; 
+            top: 65px; 
+            background: var(--card); 
+            border: 1px solid var(--gold); 
+            border-radius: 12px; 
+            padding: 10px; 
+            z-index: 1000; 
+            width: 280px; 
+            max-height: 85vh; 
+            overflow-y: auto; 
+            box-shadow: 0 5px 25px rgba(0,0,0,0.7); 
         }
-
-        #menu-toggle {
-            position: absolute; right: 15px; top: 15px; background: none; border: none; 
-            color: var(--gold); font-size: 24px; cursor: pointer; z-index: 1001;
-        }
-        .sidebar {
-            position: fixed; top: 0; right: -280px; width: 250px; height: 100%;
-            background: var(--card); border-left: 1px solid var(--gold);
-            transition: 0.4s; z-index: 1000; padding: 60px 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-        }
-        .sidebar.active { right: 0; }
+        .side-menu.active { display: block; }
         
-        /* --- Styles for Dropdowns --- */
-        .menu-dropdown {
-            margin-top: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-        .dropdown-header-btn {
-            width: 100%; padding: 12px; background: #222; color: var(--gold);
-            border: none; cursor: pointer; font-weight: bold; text-align: center;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-            outline: none;
-        }
-        .dropdown-list { display: none; padding: 5px; background: rgba(0,0,0,0.2); }
-        .dropdown-list.show { display: block; }
+        /* گۆڕینی لای مێنۆکە بەپێی زمان */
+        [dir="rtl"] .side-menu { right: 10px; left: auto; text-align: right; }
+        [dir="ltr"] .side-menu { left: 10px; right: auto; text-align: left; }
+
+        .menu-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        .submenu { display: none; background: #222; border-radius: 8px; margin: 5px 0; }
+        .submenu.show { display: block; }
+        .sub-btn { padding: 10px 15px; cursor: pointer; font-size: 14px; border-bottom: 1px solid #444; color: #ccc; text-align: inherit; }
+        .sub-btn:hover { background: var(--gold); color: #000; }
+
+        .container { padding: 20px; max-width: 900px; margin: auto; }
+        .content-box { background: var(--card); padding: 25px; border-radius: 15px; border: 1px solid #333; min-height: 500px; line-height: 1.8; }
         
-        .sub-btn {
-            display: block; width: 100%; padding: 10px; margin-bottom: 5px;
-            background: transparent; border: 1px solid transparent; color: white; 
-            border-radius: 8px; cursor: pointer; text-align: center; font-size: 14px;
-        }
-        .sub-btn:hover { background: rgba(212, 175, 55, 0.1); border-color: var(--gold); }
-        .sub-btn.active-item { border-color: var(--up); color: var(--up); }
-
-        .header h2 { color: var(--gold); text-align: center; margin: 0; font-size: 24px; font-weight: 800; }
-        .live-clock { font-size: 12px; color: #666; text-align: center; margin: 5px 0 15px; }
-
-        .status-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .btn-live { background: var(--gold); color: #000; font-weight: bold; padding: 6px 14px; border-radius: 12px; font-size: 12px; cursor: pointer; border: none; transition: 0.3s; }
+        h2 { color: var(--gold); text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+        h3 { color: var(--gold); padding: 0 10px; margin-top: 20px; }
+        [dir="rtl"] h3 { border-right: 4px solid var(--gold); }
+        [dir="ltr"] h3 { border-left: 4px solid var(--gold); }
         
-        .market-btn { display: flex; align-items: center; gap: 6px; background: rgba(128,128,128,0.1); padding: 6px 12px; border-radius: 12px; border: 1px solid #333; cursor: pointer; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .dot-open { background: var(--up); box-shadow: 0 0 8px var(--up); }
-        .dot-closed { background: var(--down); box-shadow: 0 0 8px var(--down); }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
-        .full-width { grid-column: span 2; }
-        label { display: block; font-size: 11px; color: #888; margin-bottom: 4px; padding-right: 5px; }
-        input, select { 
-            width: 100%; padding: 12px; border: 1px solid #333; border-radius: 15px; 
-            background: var(--input-bg); color: var(--text); font-size: 15px; 
-            text-align: center; outline: none; box-sizing: border-box; transition: 0.3s;
-        }
-
-        .quick-conv {
-            background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 18px;
-            margin-bottom: 15px; border: 1px solid #222;
-        }
-        .conv-inputs { display: flex; gap: 8px; align-items: center; }
-        .conv-inputs input { padding: 8px; font-size: 13px; border-radius: 10px; }
-
-        .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-        .res-card { 
-            background: rgba(128,128,128,0.05); padding: 12px 5px; border-radius: 15px; 
-            text-align: center; border: 1px solid #333; 
-        }
-        .res-card.highlight { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
-        .res-label { display: block; font-size: 10px; color: var(--gold); margin-bottom: 5px; }
-        .res-iqd { display: block; font-weight: bold; font-size: 13px; margin-bottom: 2px; }
-        .res-usd { display: block; font-size: 10px; color: #777; }
-
-        .alert-section {
-            background: rgba(0, 212, 255, 0.05); padding: 10px; border-radius: 15px;
-            border: 1px solid rgba(0, 212, 255, 0.2); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
-        }
-        .alert-input { padding: 8px; border-radius: 10px; font-size: 13px; flex-grow: 1; }
-
-        .calc-section { 
-            background: rgba(212, 175, 55, 0.03); padding: 15px; border-radius: 20px; 
-            border: 1px dashed rgba(212, 175, 55, 0.3); margin-top: 10px;
-        }
-        .weight-info { font-size: 11px; color: var(--gold); text-align: center; margin-top: 8px; display: block; font-weight: 500; }
-        
-        .total-box { 
-            text-align: center; margin-top: 12px; background: #000; padding: 15px; 
-            border-radius: 15px; border: 1px solid var(--up); position: relative; 
-        }
-        .currency-toggle { position: absolute; left: 10px; top: 15px; background: #222; border: 1px solid #444; color: var(--text); border-radius: 8px; padding: 6px; cursor: pointer; font-size: 14px; }
-
-        .btn-share { 
-            background: rgba(0, 255, 136, 0.1); color: var(--up); border: 1px solid var(--up); 
-            border-radius: 10px; padding: 5px 10px; font-size: 11px; cursor: pointer; 
-            margin-top: 10px; width: 100%; transition: 0.3s;
-        }
-        .btn-share:active { background: var(--up); color: #000; }
-
-        .price-change { font-size: 10px; margin-right: 5px; font-weight: bold; }
-        
-        .days-modal { display: none; position: absolute; top: 80px; left: 20px; right: 20px; background: var(--card); border: 2px solid var(--gold); padding: 20px; border-radius: 20px; z-index: 100; box-shadow: 0 10px 40px rgba(0,0,0,0.9); }
-        .days-modal.active { display: block; }
-        .freeze-btn { background: #333; border: 1px solid var(--freeze); color: var(--freeze); border-radius: 10px; font-size: 11px; padding: 6px 12px; cursor: pointer; margin-left: 5px; }
-        .freeze-active { background: var(--freeze); color: #000; font-weight: bold; }
-        .history-box { margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; max-height: 120px; overflow-y: auto; }
-        .history-item { font-size: 11px; padding: 8px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+        strong { color: var(--gold); }
     </style>
 </head>
 <body>
 
-<button id="menu-toggle" onclick="toggleSidebar()">☰</button>
-<div id="sidebar" class="sidebar">
-    <h3 data-key="settings" style="color:var(--gold); text-align: center;">ڕێکخستنەکان</h3>
-    
-    <div class="menu-dropdown">
-        <button class="dropdown-header-btn" onclick="toggleDropdown('langList')">
-            🌐 <span data-key="languages_btn">زمانەکان</span>
-        </button>
-        <div id="langList" class="dropdown-list">
-            <button class="sub-btn" onclick="changeLanguage('ku')">کوردی</button>
-            <button class="sub-btn" onclick="changeLanguage('ar')">العربية</button>
-            <button class="sub-btn" onclick="changeLanguage('en')">English</button>
-            <button class="sub-btn" onclick="changeLanguage('tr')">Türkçe</button>
-        </div>
-    </div>
-
-    <div class="menu-dropdown">
-        <button class="dropdown-header-btn" onclick="toggleDropdown('soundList')">
-            🔔 <span data-key="sounds_btn">دەنگەکان</span>
-        </button>
-        <div id="soundList" class="dropdown-list">
-            <button class="sub-btn" id="s1" onclick="changeSound(1, true)">زەنگی یەکەم</button>
-            <button class="sub-btn" id="s2" onclick="changeSound(2, true)">زەنگی دووەم</button>
-            <button class="sub-btn" id="s3" onclick="changeSound(3, true)">زەنگی سێیەم</button>
-        </div>
-    </div>
-
-    <button onclick="toggleSidebar()" data-key="close" style="margin-top: 30px; width: 100%; padding: 12px; border-radius: 12px; background: var(--gold); border: none; font-weight: bold; cursor:pointer;">داخستن</button>
+<div class="navbar">
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="nav-title" data-key="nav-title">ڕێکخستنی ئامێر</div>
 </div>
 
-<div class="box">
-    <button onclick="document.body.classList.toggle('light-mode')" style="position:absolute; left:15px; top:15px; background:none; border:none; cursor:pointer; font-size:18px;">🌓</button>
-    <div class="header"><h2 data-key="title">بۆرسەی زێڕ</h2></div>
-    <p id="live-clock" class="live-clock">--:--:--</p>
-    
-    <div class="status-bar">
-        <button id="live-btn" class="btn-live" onclick="fetchGoldPrice()">Live 🔴</button>
-        <div style="display: flex; gap: 5px; align-items: center;">
-            <button id="freeze-btn" class="freeze-btn" onclick="toggleFreeze()" data-key="freeze">❄️ بەستن</button>
-            <div class="market-btn" onclick="document.getElementById('daysModal').classList.toggle('active')">
-                <div id="status-dot" class="status-dot"></div>
-                <span id="market-text" data-key="market" style="font-size: 12px;">بۆرسە</span>
-            </div>
-        </div>
+<div id="sideMenu" class="side-menu">
+    <div class="menu-item" onclick="toggleSub('langSub')">
+        <span data-key="btn-lang">زمانەکان / Languages</span><span>▼</span>
+    </div>
+    <div id="langSub" class="submenu">
+        <div class="sub-btn" onclick="changeLanguage('ku')">کوردی</div>
+        <div class="sub-btn" onclick="changeLanguage('ar')">العربية</div>
+        <div class="sub-btn" onclick="changeLanguage('en')">English</div>
+        <div class="sub-btn" onclick="changeLanguage('tr')">Türkçe</div>
+        <div class="sub-btn" onclick="changeLanguage('zh')">中文 (Chinese)</div>
     </div>
 
-    <div class="quick-conv">
-        <label data-key="quick_conv_label" style="text-align: center; display: block; margin-bottom: 8px; font-size: 10px; color: var(--gold);">گۆڕینەوەی خێرا (دۆلار ⇄ دینار)</label>
-        <div class="conv-inputs">
-            <input type="number" id="quick-usd" placeholder="$" oninput="convertQuick('usd')">
-            <span style="font-size: 12px;">⇄</span>
-            <input type="number" id="quick-iqd" placeholder="د.ک" oninput="convertQuick('iqd')">
-        </div>
+    <div class="menu-item" onclick="toggleSub('chenSub')">
+        <span>Chen Hsong Settings</span><span>▼</span>
     </div>
-
-    <div class="alert-section">
-        <label data-key="alert_me" style="color: var(--freeze); margin: 0; font-size: 10px;">ئاگادارم بکە لە:</label>
-        <input type="number" id="alert-price" class="alert-input" placeholder="...">
-        <span id="alert-status" style="font-size: 14px;">🔔</span>
+    <div id="chenSub" class="submenu show">
+        <div class="sub-btn" onclick="render('plast')">Plast / Decomp</div>
+        <div class="sub-btn" onclick="render('inject')">Injection Setting</div>
+        <div class="sub-btn" onclick="render('openClose')">Mould Open/Close</div>
+        <div class="sub-btn" onclick="render('temp')">Temperature</div>
+        <div class="sub-btn" onclick="render('core')">Core Setting</div>
+        <div class="sub-btn" onclick="render('air')">Air Setting</div>
+        <div class="sub-btn" onclick="render('timer')">Timer Setting</div>
+        <div class="sub-btn" onclick="render('purge')">Auto Purge Setting</div>
+        <div class="sub-btn" onclick="render('thickness')">Thickness & Clamp Force</div>
+        <div class="sub-btn" onclick="render('ejector')">Ejector</div>
+        <div class="sub-btn" onclick="render('carriage')">Carriage Setting</div>
     </div>
+</div>
 
-    <div id="daysModal" class="days-modal">
-        <div data-key="market_schedule" style="text-align: center; color: var(--gold); font-size: 15px; font-weight: bold; margin-bottom: 15px;">خشتەی بۆرسەی جیهانی</div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #333;"><span data-key="mon_fri">دووشەممە - هەینی</span> <span data-key="open" style="color:var(--up)">کراوەیە</span></div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0;"><span data-key="sat_sun">شەممە - یەکشەممە</span> <span data-key="closed" style="color:var(--down)">داخراوە</span></div>
-        <button onclick="document.getElementById('daysModal').classList.remove('active')" data-key="close" style="width: 100%; margin-top: 15px; background: var(--gold); border: none; border-radius: 12px; cursor: pointer; padding: 10px; font-weight: bold;">داخستن</button>
-    </div>
-
-    <div class="grid">
-        <div><label><span data-key="ounce_label">ئۆنسە</span> <span id="trend"></span><span id="diff-val" class="price-change"></span></label><input type="number" id="ounce" step="0.01" oninput="update()"></div>
-        <div><label data-key="dollar_label">١٠٠ دۆلار</label><input type="number" id="dollar" oninput="autoPremium(); convertQuick('usd')"></div>
-        <div class="full-width">
-            <label data-key="premium_label">مەسرەف + حەواڵە ($)</label>
-            <input type="number" id="premium" oninput="update()">
-        </div>
-    </div>
-
-    <div class="results">
-        <div class="res-card"><span class="res-label" data-key="v24">عەیار ٢٤</span><span class="res-iqd" id="v24-iqd">0</span><span class="res-usd" id="v24-usd">$0</span></div>
-        <div class="res-card highlight"><span class="res-label" data-key="v21">عەیار ٢١</span><span class="res-iqd" id="v21-iqd">0</span><span class="res-usd" id="v21-usd">$0</span></div>
-        <div class="res-card"><span class="res-label" data-key="v18">عەیار ١٨</span><span class="res-iqd" id="v18-iqd">0</span><span class="res-usd" id="v18-usd">$0</span></div>
-    </div>
-
-    <div class="calc-section">
-        <div class="grid" style="margin: 0; gap: 8px;">
-            <div><label data-key="gram">گرام</label><input type="number" id="g-weight" placeholder="0" oninput="update()"></div>
-            <div><label data-key="mithqal">مسقاڵ</label><input type="number" id="m-weight" placeholder="0" oninput="update()"></div>
-            <div><label data-key="wage">حەق دەست</label><input type="number" id="work-cost" value="0" oninput="update()"></div>
-            <div><label data-key="karat">عەیار</label><select id="calc-karat" onchange="update()"><option value="1">٢٤</option><option value="0.875" selected>٢١</option><option value="0.75">١٨</option></select></div>
-        </div>
-        <span id="weight-detail" class="weight-info">...</span>
-        <div class="total-box">
-            <button class="currency-toggle" onclick="toggleCurrency()">⇄</button>
-            <span id="total-val" style="color:var(--up); font-size: 20px; font-weight: bold;">0 د.ک</span>
-            <button class="btn-share" onclick="shareResult()" data-key="share">📤 هاوبەشکردنی نرخ</button>
-            <div onclick="addToHistory()" data-key="save" style="margin-top: 12px; color:#666; font-size:10px; cursor:pointer; text-decoration: underline;">➕ پاشەکەوت بکە</div>
-        </div>
-    </div>
-
-    <div id="history-container" class="history-box">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span data-key="history_list" style="font-size:10px; color:#888;">لیستی پاشەکەوت:</span><button onclick="clearHistory()" data-key="clear" style="background:none; border:none; color:var(--down); font-size:9px; cursor:pointer;">سڕینەوە</button></div>
-        <div id="history-list"></div>
+<div class="container">
+    <div id="mainContent" class="content-box">
+        <h2 data-key="welcome-h">بەخێرهاتیت</h2>
+        <p data-key="welcome-p">تکایە بەشێک لە مێنۆکە هەڵبژێرە بۆ بینینی زانیارییەکان.</p>
     </div>
 </div>
 
 <script>
-    let isFrozen = false;
-    let showInDollar = false;
-    let currentTotalIQD = 0;
-    let lastPrice = 0;
     let currentLang = 'ku';
-    let selectedSound = 1;
+    let currentSection = '';
 
-    const translations = {
-        ku: { title: "بۆرسەی زێڕ", settings: "ڕێکخستنەکان", languages_btn: "زمانەکان", sounds_btn: "دەنگەکان", close: "داخستن", freeze: "❄️ بەستن", market: "بۆرسە", quick_conv_label: "گۆڕینەوەی خێرا (دۆلار ⇄ دینار)", alert_me: "ئاگادارم بکە لە:", market_schedule: "خشتەی بۆرسەی جیهانی", mon_fri: "دووشەممە - هەینی", sat_sun: "شەممە - یەکشەممە", open: "کراوەیە", closed: "داخراوە", ounce_label: "ئۆنسە", dollar_label: "١٠٠ دۆلار", premium_label: "مەسرەف + حەواڵە ($)", v24: "عەیار ٢٤", v21: "عەیار ٢١", v18: "عەیار ١٨", gram: "گرام", mithqal: "مسقاڵ", wage: "حەق دەست", karat: "عەیار", share: "📤 هاوبەشکردنی نرخ", save: "➕ پاشەکەوت بکە", history_list: "لیستی پاشەکەوت:", clear: "سڕینەوە", mithqal_unit: "مسقاڵ", nod_unit: "نۆد", frozen_msg: "✅ بەستراوە" },
-        ar: { title: "بورصة الذهب", settings: "الإعدادات", languages_btn: "اللغات", sounds_btn: "الأصوات", close: "إغلاق", freeze: "❄️ تجميد", market: "البورصة", quick_conv_label: "تحويل سريع (دولار ⇄ دينار)", alert_me: "نبهني عند:", market_schedule: "جدول البورصة العالمية", mon_fri: "الأثنين - الجمعة", sat_sun: "السبت - الأحد", open: "مفتوح", closed: "مغلق", ounce_label: "أونصة", dollar_label: "١٠٠ دولار", premium_label: "مصرف + حوالة ($)", v24: "عيار ٢٤", v21: "عيار ٢١", v18: "عيار ١٨", gram: "جرام", mithqal: "مثقال", wage: "أجور الصياغة", karat: "عيار", share: "📤 مشاركة السعر", save: "➕ حفظ النتائج", history_list: "سجل المحفوظات:", clear: "مسح", mithqal_unit: "مثقال", nod_unit: "نود", frozen_msg: "✅ متجمد" },
-        en: { title: "Gold Exchange", settings: "Settings", languages_btn: "Languages", sounds_btn: "Sounds", close: "Close", freeze: "❄️ Freeze", market: "Market", quick_conv_label: "Quick Conv (USD ⇄ IQD)", alert_me: "Alert me at:", market_schedule: "Global Market Schedule", mon_fri: "Mon - Fri", sat_sun: "Sat - Sun", open: "Open", closed: "Closed", ounce_label: "Ounce", dollar_label: "$100 Rate", premium_label: "Premium + Transfer ($)", v24: "Karat 24", v21: "Karat 21", v18: "Karat 18", gram: "Gram", mithqal: "Mithqal", wage: "Work Cost", karat: "Karat", share: "📤 Share Price", save: "➕ Save Result", history_list: "History:", clear: "Clear", mithqal_unit: "Mithqal", nod_unit: "Nod", frozen_msg: "✅ Frozen" },
-        tr: { title: "Altın Borsası", settings: "Ayarlar", languages_btn: "Diller", sounds_btn: "Sesler", close: "Kapat", freeze: "❄️ Dondur", market: "Borsa", quick_conv_label: "Hızlı Dönüştür (USD ⇄ IQD)", alert_me: "Beni uyar:", market_schedule: "Küresel Borsa Takvimi", mon_fri: "Pazartesi - Cuma", sat_sun: "Cumartesi - Pazar", open: "Açık", closed: "Kapalı", ounce_label: "Ons", dollar_label: "$100 Kuru", premium_label: "Masraf + Havale ($)", v24: "24 Ayar", v21: "21 Ayar", v18: "18 Ayar", gram: "Gram", mithqal: "Miskal", wage: "İşçilik", karat: "Ayar", share: "📤 Fiyatı Paylaş", save: "➕ Kaydet", history_list: "Kayıt Geçmişi:", clear: "Temizle", mithqal_unit: "Miskal", nod_unit: "Nod", frozen_msg: "✅ Donduruldu" }
+    const dataStore = {
+        plast: {
+            ku: `
+                <h2>Plast/Decomp Setting (ڕێکخستنی پلاستیککردن و سەکباک)</h2>
+                <p>ئەم بەشە کۆنترۆڵی ئامادەکردنی ماددەی نوێ و جووڵەی بزمارە بەرەو دواوە دەکات.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>١. زاراوە سەرەکییەکان (قۆناغەکان)</h3>
+                <ul>
+                    <li><strong>Plast (پلاستیککردن):</strong> ئەمە قۆناغی سووڕانەوە و گەڕانەوەی بزمارەیە (Screw Rotation & Return). تێیدا ماددەی نوێ دەتوێنرێتەوە و لەبەردەم بزمارەکەدا کۆدەکرێتەوە بۆ لێدانی داهاتوو.</li>
+                    <li><strong>Decomp (Decompression / Suckback):</strong> پێی دەوترێت <strong>سەکباک</strong>. ئەمە جووڵەی بزمارە بەرەو دواوە <strong>بەبێ سووڕانەوە</strong>. ئەرکی ئەم قۆناغە کەمکردنەوەی پەستانی سەر ماددە تواوەکەیە بۆ ئەوەی لە دەمی نۆزڵەوە (Nozzle) دڵۆپە نەکات. دوو جۆری هەیە:
+                        <ul>
+                            <li><strong>Decomp Bef (Before):</strong> سەکباک پێش پلاستیککردن (پێش کرداری Inject ڕوودەدات).</li>
+                            <li><strong>Decomp Aft (After):</strong> سەکباک دوای پلاستیککردن (دوای تەواوبوونی Plast ڕوودەدات - ئەمەیان باوترە).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>٢. پارامێتەرەکان (Sp, Pr, Bp, Pos/Time)</h3>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> خێرایی سووڕانەوەی بزمارە لە کاتی پلاستیککردندا، یان خێرایی پاشەکشەی بزمارە لە کاتی سەکباکدا.</li>
+                    <li><strong>Pr. (Pressure):</strong> زۆرترین پەستانی هایدرۆلیکی کە ئامێرەکە ڕێگەی پێ دەدات بۆ جووڵەی بزمارە بەرەو دواوە.</li>
+                    <li><strong>Bp. (Back Pressure):</strong> گرنگترین پارامێتەرە. ئەو پەستانەیە کە ڕێگری لە گەڕانەوەی بزمارەکە دەکات بۆ تێکەڵکردنی باشتر، دەرکردنی هەوا و یەکسانکردنی پلەی گەرمی.</li>
+                    <li><strong>Pos. (Position):</strong> شوێنی بزمارە نیشان دەدات کە تێیدا قۆناغەکە کۆتایی دێت (وەک Plast End Position).</li>
+                    <li><strong>Time (کات):</strong> ڕێکخستنی پلاستیککردن یان سەکباک بەپێی کات لەبری شوێن.</li>
+                </ul>
+                <h3>٣. زاراوە زیادەکان</h3>
+                <ul>
+                    <li><strong>Plast Dly (Plasticizing Delay):</strong> کاتی دواکەوتنی دەستپێکردنی پلاستیککردن؛ چەند چرکە بوەستێت دوای لێدان ئینجا دەست پێ بکات.</li>
+                    <li><strong>Cooling Time:</strong> کاتی ساردبوونەوە؛ ئەو کاتەیە کە قاڵب بە داخراوی دەمێنێتەوە و پلاستیککردن لەم کاتەدا ئەنجام دەدرێت.</li>
+                    <li><strong>Screw End (Shot Size):</strong> ئەو شوێنە کۆتاییەی بزمارەکە بۆی دەگەڕێتەوە. بە زیادکردنی، بڕی ماددە و Pos Cushion زیاد دەکات.</li>
+                </ul>
+            `,
+            ar: `
+                <h2>إعدادات التلدين والساكبك (Plast/Decomp)</h2>
+                <p>هذا القسم يتحكم في تجهيز المادة وحركة البرغي للخلف.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. المصطلحات الأساسية (المراحل)</h3>
+                <ul>
+                    <li><strong>Plast (التلدين):</strong> مرحلة دوران ورجوع البرغي لصهر المادة وتجهيزها للحقنة التالية.</li>
+                    <li><strong>Decomp (Suckback):</strong> حركة البرغي للخلف بدون دوران لتقليل الضغط ومنع التنقيط من النوزل.
+                        <ul>
+                            <li><strong>Decomp Bef:</strong> الساكبك قبل التلدين (قبل الحقن).</li>
+                            <li><strong>Decomp Aft:</strong> الساكبك بعد التلدين (بعد انتهاء Plast - وهو الأكثر شيوعاً).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>2. البارامترات (Sp, Pr, Bp, Pos/Time)</h3>
+                <ul>
+                    <li><strong>Sp. (السرعة):</strong> سرعة دوران البرغي أثناء التلدين أو سرعة تراجعه أثناء الساكبك.</li>
+                    <li><strong>Pr. (الضغط):</strong> أقصى ضغط هيدروليكي مسموح به لحركة البرغي للخلف.</li>
+                    <li><strong>Bp. (الضغط العكسي):</strong> أهم بارامتر؛ وهو الضغط الذي يقاوم رجوع البرغي لضمان خلط المادة وطرد الهواء وتوحيد الحرارة.</li>
+                    <li><strong>Pos. (الموقع):</strong> الموقع الذي تنتهي عنده المرحلة (مثل Plast End Position).</li>
+                    <li><strong>Time (الوقت):</strong> ضبط التلدين أو الساكبك بناءً على الزمن بدلاً من الموقع.</li>
+                </ul>
+                <h3>3. مصطلحات إضافية</h3>
+                <ul>
+                    <li><strong>Plast Dly:</strong> وقت تأخير بدء التلدين بعد عملية الحقن.</li>
+                    <li><strong>Cooling Time:</strong> وقت التبريد؛ الوقت الذي يظل فيه القالب مغلقاً ويتم التلدين خلاله.</li>
+                    <li><strong>Screw End (Shot Size):</strong> الموقع النهائي لرجوع البرغي، وبزيادته تزداد كمية المادة و Pos Cushion.</li>
+                </ul>
+            `,
+            en: `
+                <h2>Plast/Decomp Setting</h2>
+                <p>This section controls new material preparation and backward screw movement.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. Main Terms (Phases)</h3>
+                <ul>
+                    <li><strong>Plast (Plasticizing):</strong> The stage of screw rotation and return where material is melted for the next shot.</li>
+                    <li><strong>Decomp (Suckback):</strong> Backward movement of the screw without rotation to reduce pressure and prevent nozzle drooling.
+                        <ul>
+                            <li><strong>Decomp Bef:</strong> Suckback before plasticizing (before Injection).</li>
+                            <li><strong>Decomp Aft:</strong> Suckback after plasticizing (after Plast is finished - most common).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>2. Parameters (Sp, Pr, Bp, Pos/Time)</h3>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> Rotation speed during plasticizing or retraction speed during suckback.</li>
+                    <li><strong>Pr. (Pressure):</strong> Maximum allowed hydraulic pressure for the screw backward movement.</li>
+                    <li><strong>Bp. (Back Pressure):</strong> The most important parameter; resists screw return to ensure better mixing, air removal, and thermal uniformity.</li>
+                    <li><strong>Pos. (Position):</strong> Indicates where the phase ends (e.g., Plast End Position).</li>
+                    <li><strong>Time:</strong> Setting plasticizing or suckback based on duration instead of position.</li>
+                </ul>
+                <h3>3. Additional Terms</h3>
+                <ul>
+                    <li><strong>Plast Dly (Plasticizing Delay):</strong> Delay time before starting plasticizing after injection.</li>
+                    <li><strong>Cooling Time:</strong> The time the mold remains closed for product cooling; plasticizing occurs during this period.</li>
+                    <li><strong>Screw End (Shot Size):</strong> The final return position of the screw. Increasing it increases the shot size and Pos Cushion.</li>
+                </ul>
+            `,
+            tr: `
+                <h2>Plast/Decomp Ayarı (Plastikleştirme ve Geri Emme)</h2>
+                <p>Bu bölüm yeni malzemenin hazırlanmasını ve vidanın geriye doğru hareketini kontrol eder.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. Ana Terimler (Aşamalar)</h3>
+                <ul>
+                    <li><strong>Plast (Plastikleştirme):</strong> Vidanın dönerek geri geldiği ve malzemenin bir sonraki enjeksiyon için eritildiği aşama.</li>
+                    <li><strong>Decomp (Suckback):</strong> Nozuldan malzeme damlamasını önlemek için vidanın dönmeden geriye çekilmesi.
+                        <ul>
+                            <li><strong>Decomp Bef:</strong> Plastikleştirmeden önce geri emme (Enjeksiyondan önce).</li>
+                            <li><strong>Decomp Aft:</strong> Plastikleştirmeden sonra geri emme (Plast bittikten sonra - en yaygın).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>2. Parametreler (Sp, Pr, Bp, Pos/Time)</h3>
+                <ul>
+                    <li><strong>Sp. (Hız):</strong> Plastikleştirme sırasındaki dönüş hızı veya geri emme sırasındaki geri çekilme hızı.</li>
+                    <li><strong>Pr. (Basınç):</strong> Vidanın geri hareketi için izin verilen maksimum hidrolik basınç.</li>
+                    <li><strong>Bp. (Geri Basınç):</strong> En önemli parametre; daha iyi karıştırma, hava tahliyesi ve ısı dengesi için vidanın geri dönüşüne direnç gösterir.</li>
+                    <li><strong>Pos. (Konum):</strong> Aşamanın sona erdiği konumu gösterir (Örn: Plast Bitiş Konumu).</li>
+                    <li><strong>Time (Zaman):</strong> Plastikleştirme veya geri emmeyi konum yerine süreye göre ayarlama.</li>
+                </ul>
+                <h3>3. Ek Terimler</h3>
+                <ul>
+                    <li><strong>Plast Dly:</strong> Enjeksiyondan sonra plastikleştirmenin başlama gecikme süresi.</li>
+                    <li><strong>Cooling Time:</strong> Soğuma süresi; kalıbın kapalı kaldığı süredir ve plastikleştirme bu sırada yapılır.</li>
+                    <li><strong>Screw End (Shot Size):</strong> Vidanın geri dönüş final konumu. Artırılması, malzeme miktarını ve Pos Cushion değerini artırır.</li>
+                </ul>
+            `,
+            zh: `
+                <h2>熔胶/抽芯设置 (Plast/Decomp Setting)</h2>
+                <p>此部分控制新物料的准备和螺杆的后退运动。</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. 主要术语（阶段）</h3>
+                <ul>
+                    <li><strong>Plast (熔胶):</strong> 螺杆旋转并后退的阶段，使下一次注射的物料熔化。</li>
+                    <li><strong>Decomp (抽芯/倒索):</strong> 螺杆不旋转直接后退，以降低压力并防止射嘴流涎。
+                        <ul>
+                            <li><strong>Decomp Bef:</strong> 熔胶前倒索（在注射前发生）。</li>
+                            <li><strong>Decomp Aft:</strong> 熔胶后倒索（在熔胶完成后发生 - 最常用）。</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>2. 表格参数 (Sp, Pr, Bp, Pos/Time)</h3>
+                <ul>
+                    <li><strong>Sp. (速度):</strong> 熔胶时的旋转速度或倒索时的后退速度。</li>
+                    <li><strong>Pr. (压力):</strong> 允许螺杆后退的最大液压。</li>
+                    <li><strong>Bp. (背压):</strong> 最关键的参数；通过阻碍螺杆回位来确保物料混合均匀、排除空气并稳定温度。</li>
+                    <li><strong>Pos. (位置):</strong> 表示阶段结束的位置（例如：熔胶终止位置）。</li>
+                    <li><strong>Time (时间):</strong> 基于时间而非位置来设置熔胶或倒索。</li>
+                </ul>
+                <h3>3. 其他术语</h3>
+                <ul>
+                    <li><strong>Plast Dly (熔胶延迟):</strong> 射胶结束后熔胶开始前的延迟时间。</li>
+                    <li><strong>Cooling Time (冷却时间):</strong> 模具保持闭合的时间；熔胶过程在此期间完成。</li>
+                    <li><strong>Screw End (螺杆终点):</strong> 螺杆回位的最终位置（决定注射量）。增加此值会增加注射量和缓冲位置 (Pos Cushion)。</li>
+                </ul>
+            `
+        },        
+air: {
+            ku: `
+                <h2>Air Setting (ڕێکخستنی هەوا)</h2>
+                <p>ئەم شاشەیە دابەش بووە بۆ ٦ بەشی هاوشێوە (Air 1 تا Air 6)، کە هەر یەکێکیان کۆنترۆڵی زمانەیەکی (Valve) هەوا دەکات:</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>١. زاراوە سەرەکییەکانی هەر بەشێک</h3>
+                <ul>
+                    <li><strong>Air 1 تا Air 6:</strong> نیشانەی ژمارەی ئەو زمانەی هەوایەیە کە دەتەوێت ڕێکی بخەیت.</li>
+                    <li><strong>Not use / Use:</strong> دۆخی چالاککردن نیشان دەدات. ئەگەر لەسەر <strong>Not use</strong> بێت، واتە ئەو زمانەی هەوایە کار ناکات. ئەگەر بیخەیتە سەر <strong>Use</strong>، واتە چالاک دەبێت.</li>
+                    <li><strong>Start Position:</strong> ئەو شوێنەی قاڵبەکەیە (Mould Position) کە تێیدا هەواکە دەست بە لێدان دەکات. بۆ نموونە لە Air 1دا لەسەر 350.0mm دانراوە، واتە کاتێک قاڵبەکە دەکرێتەوە و دەگاتە ئەو شوێنە، هەواکە لێ دەدات.</li>
+                    <li><strong>AIR DELAY:</strong> کاتی دواکەوتنی لێدانی هەوا. واتە دوای ئەوەی قاڵبەکە گەیشتە شوێنی دیاریکراو، ئامێرەکە چەند چرکە بوەستێت ئینجا هەواکە لێ بدات.</li>
+                    <li><strong>AIR TIMER:</strong> ماوەی لێدانی هەوا. واتە هەواکە بۆ ماوەی چەند چرکە بەردەوام بێت لە لێدان (بۆ نموونە 15.0s).</li>
+                </ul>
+
+                <h3>٢. بۆچی ئەم بەشە بەکاردێت؟</h3>
+                <ul>
+                    <li><strong>جیاکردنەوەی بەرهەم:</strong> هەندێک جار بەرهەمەکە بە قاڵبەکەوە دەنووسێت، لێدانی هەوا یارمەتی دەدات کە بە ئاسانی لێ ببێتەوە.</li>
+                    <li><strong>پاراستنی بەرهەم:</strong> بۆ ئەوەی دەرپەڕێنەرەکە (Ejector) نیشانە لەسەر بەرهەمەکە دروست نەکات، هەوا وەک یارمەتیدەرێک بەکاردێت.</li>
+                    <li><strong>پاککردنەوەی قاڵب:</strong> هەندێک جار هەوا بەکاردێت بۆ پاککردنەوەی ناو قاڵبەکە لە پاشماوەی پلاستیک پێش داخستنەوە.</li>
+                </ul>
+            `,
+            ar: `
+                <h2>إعدادات الهواء (Air Setting)</h2>
+                <p>تنقسم هذه الشاشة إلى 6 أقسام متطابقة (من Air 1 إلى Air 6)، يتحكم كل منها في صمام (Valve) هواء معين:</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. المصطلحات الأساسية لكل قسم</h3>
+                <ul>
+                    <li><strong>Air 1 إلى Air 6:</strong> يشير إلى رقم صمام الهواء الذي تريد ضبطه.</li>
+                    <li><strong>Not use / Use:</strong> يوضح حالة التفعيل؛ إذا كان على <strong>Not use</strong>، فإن صمام الهواء هذا لا يعمل. وإذا تم ضبطه على <strong>Use</strong>، فإنه يصبح مفعلاً.</li>
+                    <li><strong>Start Position:</strong> هو موضع القالب (Mould Position) الذي يبدأ عنده نفخ الهواء. على سبيل المثال في Air 1 إذا تم ضبطه على 350.0mm، فهذا يعني عندما يفتح القالب ويصل إلى ذلك الموضع، يبدأ الهواء بالنفخ.</li>
+                    <li><strong>AIR DELAY:</strong> وقت تأخير نفخ الهواء؛ أي بعد وصول القالب إلى الموضع المحدد، كم ثانية يجب أن تنتظر الماكينة قبل بدء نفخ الهواء.</li>
+                    <li><strong>AIR TIMER:</strong> مدة نفخ الهواء؛ أي كم ثانية يستمر الهواء في النفخ بشكل مستمر (على سبيل المثال 15.0s).</li>
+                </ul>
+
+                <h3>2. لماذا يستخدم هذا القسم؟</h3>
+                <ul>
+                    <li><strong>فصل المنتج:</strong> في بعض الأحيان يلتصق المنتج بالقالب، ويساعد نفخ الهواء في فصله بسهولة.</li>
+                    <li><strong>حماية المنتج:</strong> يستخدم الهواء كمساعد للقاذف (Ejector) لتجنب ترك علامات ميكانيكية على المنتج ناتجة عن دفع القاذف.</li>
+                    <li><strong>تنظيف القالب:</strong> يستخدم الهواء أحياناً لتنظيف الجزء الداخلي من القالب من بقايا البلاستيك قبل عملية الإغلاق مرة أخرى.</li>
+                </ul>
+            `,
+            en: `
+                <h2>Air Setting</h2>
+                <p>This screen is divided into 6 identical sections (Air 1 to Air 6), each controlling an individual air valve:</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. Key Terms for Each Section</h3>
+                <ul>
+                    <li><strong>Air 1 to Air 6:</strong> Indicates the number of the air valve you wish to configure.</li>
+                    <li><strong>Not use / Use:</strong> Shows the activation status. If set to <strong>Not use</strong>, that air valve will not work. If set to <strong>Use</strong>, it becomes active.</li>
+                    <li><strong>Start Position:</strong> The mold position (Mould Position) at which the air begins to blow. For example, if Air 1 is set to 350.0mm, it means when the mold opens and reaches that position, the air will blow.</li>
+                    <li><strong>AIR DELAY:</strong> Air delay time; meaning after the mold reaches the specified position, how many seconds the machine should wait before starting the air blast.</li>
+                    <li><strong>AIR TIMER:</strong> Air duration; meaning for how many seconds the air should continue blowing (e.g., 15.0s).</li>
+                </ul>
+
+                <h3>2. Why is this section used?</h3>
+                <ul>
+                    <li><strong>Part Separation:</strong> Sometimes the product sticks to the mold; the air blast helps it release easily.</li>
+                    <li><strong>Product Protection:</strong> Air is used as an assistant to the ejector to prevent the ejector from leaving marks on the product.</li>
+                    <li><strong>Mold Cleaning:</strong> Sometimes air is used to clean the inside of the mold from plastic residue before closing it again.</li>
+                </ul>
+            `,
+            tr: `
+                <h2>Hava Ayarı (Air Setting)</h2>
+                <p>Bu ekran, her biri bir hava valfini (Valve) kontrol eden 6 benzer bölüme (Air 1'den Air 6'ya kadar) ayrılmıştır:</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. Her Bölüm İçin Temel Terimler</h3>
+                <ul>
+                    <li><strong>Air 1 - Air 6:</strong> Ayarlamak istediğiniz hava valfinin numarasını gösterir.</li>
+                    <li><strong>Not use / Use:</strong> Etkinleştirme durumunu gösterir. Eğer <strong>Not use</strong> üzerindeyse, o hava valfi çalışmaz. Eğer <strong>Use</strong> konumuna getirirseniz, aktif olur.</li>
+                    <li><strong>Start Position:</strong> Hava üflemenin başlayacağı kalıp konumudur (Mould Position). Örneğin Air 1'de 350.0mm olarak ayarlanmışsa, kalıp açılıp bu konuma ulaştığında hava üflemeye başlar.</li>
+                    <li><strong>AIR DELAY:</strong> Hava gecikme süresi; yani kalıp belirlenen konuma ulaştıktan sonra, makinenin hava üflemeye başlamadan önce kaç saniye bekleyeceği.</li>
+                    <li><strong>AIR TIMER:</strong> Hava süresi; yani havanın kaç saniye boyunca kesintisiz üflemeye devam edeceği (örneğin 15.0s).</li>
+                </ul>
+
+                <h3>2. Bu Bölüm Neden Kullanılır?</h3>
+                <ul>
+                    <li><strong>Ürün Ayırma:</strong> Bazen ürün kalıba yapışır, hava üfleme ürünün kolayca ayrılmasına yardımcı olur.</li>
+                    <li><strong>Ürün Koruma:</strong> İticinin (Ejector) ürün üzerinde iz bırakmaması için hava, yardımcı bir eleman olarak kullanılır.</li>
+                    <li><strong>Kalıp Temizliği:</strong> Kalıbı tekrar kapatmadan önce içindeki plastik kalıntılarını temizlemek için bazen hava kullanılır.</li>
+                </ul>
+            `,
+            zh: `
+                <h2>吹气设置 (Air Setting)</h2>
+                <p>此屏幕分为 6 个相同的循环（Air 1 到 Air 6），每个循环控制一个气阀 (Valve)：</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. 各部分主要术语</h3>
+                <ul>
+                    <li><strong>Air 1 到 Air 6:</strong> 表示您要配置的气阀编号。</li>
+                    <li><strong>Not use / Use:</strong> 显示启用状态。如果设置为 <strong>Not use</strong>，则该气阀不工作。如果设置为 <strong>Use</strong>，则启用。</li>
+                    <li><strong>Start Position:</strong> 吹气开始时的模具位置 (Mould Position)。例如，如果 Air 1 设置为 350.0mm，这意味着当模具打开并到达该位置时，吹气将开始。</li>
+                    <li><strong>AIR DELAY:</strong> 吹气延迟时间；即模具到达指定位置后，机器在开始吹气前需要等待的秒数。</li>
+                    <li><strong>AIR TIMER:</strong> 吹气时间；即空气持续吹出的秒数（例如 15.0s）。</li>
+                </ul>
+
+                <h3>2. 为什么使用此功能？</h3>
+                <ul>
+                    <li><strong>产品脱模:</strong> 有时产品会粘在模具上，吹气有助于使其顺利脱落。</li>
+                    <li><strong>保护产品:</strong> 吹气作为顶针 (Ejector) 的辅助工具，防止顶针在产品上留下机械痕迹。</li>
+                    <li><strong>清洁模具:</strong> 有时在重新合模前，使用空气清理模具内部残留的塑料残渣。</li>
+                </ul>
+            `
+        },
+        inject: {
+            ku: `
+                <h2>Injection Setting (ڕێکخستنی لێدان)</h2>
+                <p>ئەم بەشە کۆنترۆڵی قۆناغی لێدانی ماددە دەکات بۆ ناو قاڵبەکە.</p>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>١. زاراوە سەرەکییەکان (قۆناغەکان)</h3>
+                <ul>
+                    <li><strong>Inject (لێدان):</strong> قۆناغی یەکەمە، تێیدا بزمارەکە (Screw) بە خێرایی دەچێتە پێشەوە بۆ ئەوەی ماددەی تواوە بکاتە ناو قاڵبەکەوە.</li>
+                    <li><strong>Hold (ڕاگرتن):</strong> قۆناغی دووەمە، دوای لێدان دێت. تێیدا بزمارەکە پەستانێکی جێگیر دەخاتە سەر ماددەکە بۆ ئەوەی قەرەبووی کەمبوونەوەی قەبارەی ماددەکە بکاتەوە لە کاتی ساردبوونەوەدا (بۆ ئەوەی بەرهەمەکە نوقم نەبێت یان کێشی کەم نەبێت).</li>
+                    <li><strong>Cushion End (کۆتایی کوشین):</strong> بریتییە لەو بڕە ماددەیەی کە لە کۆتایی قۆناغی Holdدا لە پێش بزمارەکە دەمێنێتەوە. وەک "سەرین"ێک کار دەکات بۆ دڵنیابوون لەوەی پەستانەکە گەیشتووەتە ناو قاڵب.</li>
+                </ul>
+
+                <h3>٢. پارامێتەرەکانی ناو خشتەکە (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (Speed - خێرایی):</strong> نیشانەی خێرایی جووڵەی بزمارەکەیە بەرەو پێشەوە. هەرچەندە ئەم ژمارەیە بەرزتر بێت، ماددەکە خێراتر دەچێتە ناو قاڵبەکە.</li>
+                    <li><strong>Pr. (Pressure - پەستان):</strong> نیشانەی زۆرترین پەستانی هایدرۆلیکییە کە ئامێرەکە ڕێگەی پێ دەدات بەکاری بهێنێت بۆ پاڵنانی بزمارەکە.</li>
+                    <li><strong>Pos. (Position - شوێن):</strong> نیشانەی شوێنی بزمارەکەیە لەناو لوولەکدا. ئامێرەکە ئەم شوێنە بەکاردەهێنێت بۆ ئەوەی بزانێت کەی لە قۆناغێکەوە بگۆڕێت بۆ قۆناغێکی تر (بۆ نموونە لە Inject 1ەوە بۆ Inject 2).</li>
+                </ul>
+
+                <h3>٣. زاراوە زیادەکانی خوارەوەی شاشەکە</h3>
+                <ul>
+                    <li><strong>Injection Time (کاتی لێدان):</strong> ئەو کاتە نیشان دەدات کە ئامێرەکە تەرخانی کردووە بۆ پڕکردنی قاڵبەکە.</li>
+                    <li><strong>Hold Pre. Pos (Hold Pressure Position):</strong> بریتییە لەو شوێنەی بزمارە (Screw Position) کە تێیدا ئامێرەکە بڕیار دەدات قۆناغی لێدان (Inject) کۆتایی پێ بهێنێت و دەست بکات بە قۆناغی پەستانی ڕاگرتن (Hold Pressure). ئەمە هەمان ئەو خاڵەیە کە پێی دەوترێت خاڵی گۆڕین (Transfer Point).</li>
+                    <li><strong>Leakage Pos (Leakage Position):</strong> نیشانەی شوێنی دزەکردنە. ئەرکی ئەم پارامێتەرە پاراستنی ئامێرەکەیە؛ ئەگەر بزمارەکە لە کاتی لێداندا لەم شوێنە زیاتر تێپەڕی (بۆ نموونە بەهۆی شکانی ئەڵقەی ڕێگری گەڕانەوە - Check Ring)، ئامێرەکە ئاگاداریت دەداتەوە کە ماددەکە دزە دەکات.</li>
+                    <li><strong>Inj AUX (Injection Auxiliary):</strong> کورتکراوەی یاریدەدەری لێدانە. ئەمە بۆ کۆنترۆڵکردنی ئامێرە یاریدەدەرەکان وەک Nozzle Shut-off Valve (زمانەی داخستنی دەمی دەرچوون) یان هەر جووڵەیەکی تری یاریدەدەر کە لە کاتی لێداندا پێویست بێت.</li>
+                    <li><strong>Hold Change (Hold Changeover):</strong> ئەمە شێوازی گۆڕین بۆ Hold نیشان دەدات. ئامێرەکە دەتوانێت بە سێ شێوە بگۆڕێت بۆ قۆناغی Hold: بەپێی Position (شوێن)، Time (کات)، یان Pressure (پەستان).</li>
+                    <li><strong>Inject Press (Injection Pressure):</strong> نیشانەی پەستانی لێدانە. ئەمە ئەو پەستانە هایدرۆلیکییە نیشان دەدات کە لە کاتی قۆناغی لێداندا (Inject) بەکاردێت بۆ پاڵنانی ماددەکە بۆ ناو قاڵب.</li>
+                </ul>
+            `,
+            ar: `
+                <h2>إعدادات الحقن (Injection Setting)</h2>
+                <p>يتحكم هذا القسم في مرحلة حقن المادة داخل القالب.</p>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. المصطلحات الأساسية (المراحل)</h3>                <ul>
+                    <li><strong>Inject (الحقن):</strong> المرحلة الأولى، حيث يتقدم البرغي (Screw) بسرعة لدفع المادة المنصهرة داخل القالب.</li>
+                    <li><strong>Hold (التثبيت):</strong> المرحلة الثانية، حيث يضغط البرغي على المادة لتعويض الانكماش أثناء التبريد (لمنع العيوب أو نقص الوزن).</li>
+                    <li><strong>Cushion End (نهاية الوسادة):</strong> كمية المادة المتبقية أمام البرغي في نهاية مرحلة Hold لضمان وصول الضغط للقالب.</li>
+                </ul>
+
+                <h3>2. البارامترات (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (السرعة):</strong> سرعة حركة البرغي للأمام؛ كلما زاد الرقم، زادت سرعة ملء القالب.</li>
+                    <li><strong>Pr. (الضغط):</strong> أقصى ضغط هيدروليكي مسموح به لدفع البرغي.</li>
+                    <li><strong>Pos. (الموقع):</strong> موقع البرغي الذي يحدد متى ينتقل الجهاز من مرحلة حقن إلى أخرى (مثلاً من Inject 1 إلى Inject 2).</li>
+                </ul>
+
+                <h3>3. المصطلحات الإضافية أسفل الشاشة</h3>
+                <ul>
+                    <li><strong>Injection Time (وقت الحقن):</strong> الوقت المخصص لملء القالب.</li>
+                    <li><strong>Hold Pre. Pos (موقع ضغط التثبيت):</strong> الموقع الذي ينتهي عنده الحقن ويبدأ ضغط التثبيت (نقطة التحويل - Transfer Point).</li>
+                    <li><strong>Leakage Pos (موقع التسريب):</strong> يحمي الجهاز؛ إذا تجاوز البرغي هذا الحد (مثلاً بسبب كسر حلقة منع الرجوع Check Ring)، ينبهك الجهاز بوجود تسريب.</li>
+                    <li><strong>Inj AUX (مساعد الحقن):</strong> للتحكم في الأجهزة المساعدة مثل صمام فوهة النوزل (Nozzle Shut-off Valve) أثناء الحقن.</li>
+                    <li><strong>Hold Change (التحويل للثبات):</strong> طريقة التحويل لمرحلة Hold؛ إما حسب الموقع (Position)، أو الوقت (Time)، أو الضغط (Pressure).</li>
+                    <li><strong>Inject Press (ضغط الحقن):</strong> الضغط الهيدروليكي المستخدم لدفع المادة أثناء الملء (يختلف عن ضغط Hold).</li>
+                </ul>
+            `,
+            en: `
+                <h2>Injection Setting</h2>
+                <p>This section controls the injection phase of molten material into the mold.</p>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. Key Terms (Phases)</h3>
+                <ul>
+                    <li><strong>Inject:</strong> The first stage where the screw moves forward rapidly to push molten material into the mold.</li>
+                    <li><strong>Hold:</strong> The second stage where the screw applies constant pressure to compensate for shrinkage during cooling (to prevent sink marks or underweight parts).</li>
+                    <li><strong>Cushion End:</strong> The amount of material remaining in front of the screw at the end of the Hold phase, acting as a "cushion" for pressure transfer.</li>
+                </ul>
+
+                <h3>2. Table Parameters (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> Forward screw movement speed. Higher values mean faster mold filling.</li>
+                    <li><strong>Pr. (Pressure):</strong> Maximum hydraulic pressure the machine is allowed to use for the injection stroke.</li>
+                    <li><strong>Pos. (Position):</strong> Screw position used as a limit to switch between different injection stages (e.g., from Inject 1 to Inject 2).</li>
+                </ul>
+
+                <h3>3. Additional Parameters</h3>
+                <ul>
+                    <li><strong>Injection Time:</strong> Displays the time allocated by the machine to fill the mold.</li>
+                    <li><strong>Hold Pre. Pos:</strong> The transition point where the machine stops the Inject stage and starts the Hold phase (Transfer Point).</li>
+                    <li><strong>Leakage Pos:</strong> Safety parameter; alerts the user if the screw travels too far forward (e.g., due to a broken Check Ring), indicating leakage.</li>
+                    <li><strong>Inj AUX (Injection Auxiliary):</strong> Used to control auxiliary functions like the Nozzle Shut-off Valve during injection.</li>
+                    <li><strong>Hold Change (Hold Changeover):</strong> Method to switch to the Hold stage: either by Position, Time, or Pressure.</li>
+                    <li><strong>Inject Press:</strong> The hydraulic pressure used during the filling phase (Inject), distinct from the holding pressure.</li>
+                </ul>
+            `,
+            tr: `
+                <h2>Enjeksiyon Ayarı (Injection Setting)</h2>
+                <p>Bu bölüm, erimiş malzemenin kalıba enjekte edilme aşamasını kontrol eder.</p>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. Ana Terimler (Aşamalar)</h3>
+                <ul>
+                    <li><strong>Inject (Enjeksiyon):</strong> İlk aşama; vidanın (Screw) erimiş malzemeyi kalıba doldurmak için hızla ileri gitmesi.</li>
+                    <li><strong>Hold (Ütüleme):</strong> İkinci aşama; soğuma sırasındaki çekmeyi telafi etmek için vidanın uyguladığı sabit basınç (çöküntü veya eksik ağırlığı önlemek için).</li>
+                    <li><strong>Cushion End (Yastık Sonu):</strong> Ütüleme sonunda vidanın önünde kalan malzeme miktarı; basınç transferini garanti eder.</li>
+                </ul>
+
+                <h3>2. Tablo Parametreleri (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (Hız):</strong> Vidanın ileri gidiş hızı. Sayı ne kadar yüksekse kalıp o kadar hızlı dolar.</li>
+                    <li><strong>Pr. (Basınç):</strong> Vidayı itmek için izin verilen maksimum hidrolik basınç sınırı.</li>
+                    <li><strong>Pos. (Konum):</strong> Bir enjeksiyon kademesinden diğerine geçmek için kullanılan vida konumu (Örn: Inject 1'den Inject 2'ye).</li>
+                </ul>
+
+                <h3>3. Ekran Altındaki Ek Terimler</h3>
+                <ul>
+                    <li><strong>Injection Time (Enjeksiyon Süresi):</strong> Kalıbın doldurulması için harcanan süreyi gösterir.</li>
+                    <li><strong>Hold Pre. Pos (Ütüleme Geçiş Konumu):</strong> Enjeksiyonun bitip ütülemenin başladığı geçiş noktası (Transfer Point).</li>
+                    <li><strong>Leakage Pos (Sızıntı Konumu):</strong> Makineyi korur; vida bu sınırı geçerse (örn: Check Ring arızası), makine sızıntı uyarısı verir.</li>
+                    <li><strong>Inj AUX (Enjeksiyon Yardımcıları):</strong> Nozul kapama valfi veya enjeksiyon sırasındaki diğer yardımcı hareketleri kontrol eder.</li>
+                    <li><strong>Hold Change:</strong> Ütüleme aşamasına geçiş yöntemi: Konum (Position), Zaman (Time) veya Basınç (Pressure).</li>
+                    <li><strong>Inject Press (Enjeksiyon Basıncı):</strong> Kalıp dolumu (Inject) sırasında kullanılan gerçek hidrolik basınç.</li>
+                </ul>
+            `,
+            zh: `
+                <h2>射胶设置 (Injection Setting)</h2>
+                <p>此部分控制将熔融物料注入模具的注射阶段。</p>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. 主要术语（阶段）</h3>
+                <ul>
+                    <li><strong>Inject (射胶):</strong> 第一阶段，螺杆快速前进将熔融物料注入模具。</li>
+                    <li><strong>Hold (保压):</strong> 第二阶段，螺杆施加恒定压力以补偿冷却过程中的收缩（防止缩水或重量不足）。</li>
+                    <li><strong>Cushion End (缓冲残余):</strong> 保压结束时螺杆前端残留的料量，起到传递压力的“垫层”作用。</li>
+                </ul>
+
+                <h3>2. 表格参数 (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (速度):</strong> 螺杆前进速度。数值越高，模具填充越快。</li>
+                    <li><strong>Pr. (压力):</strong> 射胶冲程中允许使用的最大液压。</li>
+                    <li><strong>Pos. (位置):</strong> 用于在不同射胶段之间切换的螺杆位置点（例如从射胶1切换到射胶2）。</li>
+                </ul>
+
+                <h3>3. 屏幕下方附加参数</h3>
+                <ul>
+                    <li><strong>Injection Time (注射时间):</strong> 显示填充模具所需的时间。</li>
+                    <li><strong>Hold Pre. Pos (保压切换位):</strong> 射胶停止并开始保压阶段的切换位置点（切换点）。</li>
+                    <li><strong>Leakage Pos (漏料位置):</strong> 安全参数；如果螺杆超过此点（如过胶圈Check Ring损坏），机器会发出漏料警报。</li>
+                    <li><strong>Inj AUX (射胶辅助):</strong> 用于在射胶期间控制射嘴封针阀等辅助功能。</li>
+                    <li><strong>Hold Change (保压切换):</strong> 切换到保压模式的方法：位置、时间或压力切换。</li>
+                    <li><strong>Inject Press (射胶压力):</strong> 填充阶段使用的实际液压，与保压压力不同。</li>
+                </ul>
+            `
+        },
+                openClose: {
+            ku: `
+                <h2>Mould Open Close Setting (ڕێکخستنی کردنەوە و داخستنی قاڵب)</h2>
+                <p>ئەم بەشە کۆنترۆڵی جووڵەی کردنەوە و داخستنی قاڵبەکە دەکات.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>١. زانیارییە گشتییەکان</h3>
+                <ul>
+                    <li><strong>Maximum Mould:</strong> زۆرترین مەودایە کە ئامێرەکە دەتوانێت قاڵبەکەی تێدا بکاتەوە.</li>
+                    <li><strong>Maximum Press:</strong> زۆرترین پەستانی هایدرۆلیکی سیستەمەکەیە بۆ جووڵاندنی قاڵب.</li>
+                    <li><strong>Act Clamp Forc (Actual Clamp Force):</strong> ئەو هێزە ڕاستەقینەیە نیشان دەدات کە لەم ساتەدا قاڵبەکەی پێ چەقێنراوە.</li>
+                    <li><strong>LP Protect (Low Pressure Protection):</strong> پاراستنی قاڵب؛ ئەرکی ئەوەیە ئەگەر شتێک لەناو قاڵبەکەدا مابێت، ئامێرەکە هەستی پێ بکات و نەیچەقێنێت بۆ ئەوەی قاڵبەکە تێکنەچێت.</li>
+                </ul>
+                <h3>٢. بەشی کردنەوەی قاڵب (Mould Open)</h3>
+                <ul>
+                    <li><strong>Slow open:</strong> کردنەوەی هێواش لە سەرەتادا بۆ ئەوەی بەرهەمەکە بە جوانی لە قاڵبەکە جیا بێتەوە.</li>
+                    <li><strong>Open 2 & 3:</strong> قۆناغەکانی ناوەڕاستی کردنەوەن.</li>
+                    <li><strong>Fast open:</strong> کردنەوەی خێرا بۆ ئەوەی کاتی سووڕی کارکردن کەم بکرێتەوە.</li>
+                    <li><strong>Open end:</strong> خاوکردنەوەی خێرایی پێش گەیشتن بە کۆتایی مەودای کردنەوە بۆ ئەوەی ئامێرەکە بە توندی نەکێشێت بە کۆتاییەکەدا.</li>
+                    <li><strong>Syn. Eject (Synchronized Eject):</strong> هاوکاتکردنی جووڵەی دەرپەڕێنەر لەگەڵ کردنەوەی قاڵب.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>قۆناغ</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>ئەرک</th> </tr>
+                    <tr> <td>Slow open</td> <td>15%</td> <td>25bar</td> <td>3.00mm</td> <td>کردنەوەی هێواش</td> </tr>
+                    <tr> <td>Open 2</td> <td>25%</td> <td>45bar</td> <td>10.0mm</td> <td>قۆناغی ٢</td> </tr>
+                    <tr> <td>Open 3</td> <td>35%</td> <td>60bar</td> <td>20.0mm</td> <td>قۆناغی ٣</td> </tr>
+                    <tr> <td>Fast open</td> <td>35%</td> <td>33bar</td> <td>300.0mm</td> <td>کردنەوەی خێرا</td> </tr>
+                    <tr> <td>Open end</td> <td>22%</td> <td>33bar</td> <td>800.0mm</td> <td>خاوکردنەوەی کۆتایی</td> </tr>
+                </table>
+                <h3>٣. بەشی داخستنی قاڵب (Mould Close)</h3>
+                <ul>
+                    <li><strong>Fast clamp:</strong> داخستنی خێرا لە سەرەتای جووڵەکەدا بۆ پاشەکەوتکردنی کات.</li>
+                    <li><strong>Clamp 2 & 3:</strong> قۆناغەکانی ناوەڕاستی داخستنن.</li>
+                    <li><strong>LP Clamp (Low Pressure Clamp):</strong> داخستن بە پەستانی نزم؛ گرنگترین بەشە بۆ پاراستنی قاڵب.</li>
+                    <li><strong>HP Clamp (High Pressure Clamp):</strong> چەقاندن بە پەستانی بەرز دوای دڵنیابوون لە داخستن.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>قۆناغ</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>ئەرک</th> </tr>
+                    <tr> <td>Fast clamp</td> <td>55%</td> <td>40bar</td> <td>300.0mm</td> <td>داخستنی خێرا</td> </tr>
+                    <tr> <td>Clamp 2</td> <td>45%</td> <td>35bar</td> <td>250.0mm</td> <td>قۆناغی ٢</td> </tr>
+                    <tr> <td>Clamp 3</td> <td>35%</td> <td>30bar</td> <td>25.0mm</td> <td>قۆناغی ٣</td> </tr>
+                    <tr> <td>LP Clamp</td> <td>15%</td> <td>10bar</td> <td>5.00mm</td> <td>پەستانی نزم</td> </tr>
+                    <tr> <td>HP Clamp</td> <td>66%</td> <td>175bar</td> <td>0.03mm</td> <td>چەقاندنی کۆتایی</td> </tr>
+                </table>
+            `,
+            ar: `
+                <h2>إعدادات فتح وإغلاق القالب (Mould Open Close Setting)</h2>
+                <p>يتحكم هذا القسم في حركة فتح وإغلاق القالب.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. معلومات عامة</h3>
+                <ul>
+                    <li><strong>Maximum Mould:</strong> أقصى مسافة يمكن للماكينة فتح القالب فيها.</li>
+                    <li><strong>Maximum Press:</strong> أقصى ضغط هيدروليكي للنظام لتحريك القالب.</li>
+                    <li><strong>Act Clamp Forc:</strong> القوة الحقيقية لإغلاق القالب حالياً.</li>
+                    <li><strong>LP Protect (Low Pressure Protection):</strong> حماية القالب؛ لمنع تلف القالب إذا وجد جسم غريب بالداخل.</li>
+                </ul>
+                <h3>2. فتح القالب (Mould Open)</h3>
+                <ul>
+                    <li><strong>Slow open:</strong> الفتح البطيء في البداية لفصل المنتج عن القالب بسلاسة.</li>
+                    <li><strong>Open 2 & 3:</strong> مراحل الفتح المتوسطة.</li>
+                    <li><strong>Fast open:</strong> الفتح السريع لتقليل زمن الدورة.</li>
+                    <li><strong>Open end:</strong> تباطؤ السرعة قبل الوصول للنهاية لتجنب الصدمات.</li>
+                    <li><strong>Syn. Eject (Synchronized Eject):</strong> مزامنة حركة القاذف مع فتح القالب.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>المرحلة</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>المهمة</th> </tr>
+                    <tr> <td>Slow open</td> <td>15%</td> <td>25bar</td> <td>3.00mm</td> <td>فتح بطيء</td> </tr>
+                    <tr> <td>Open 2</td> <td>25%</td> <td>45bar</td> <td>10.0mm</td> <td>مرحلة ٢</td> </tr>
+                    <tr> <td>Open 3</td> <td>35%</td> <td>60bar</td> <td>20.0mm</td> <td>مرحلة ٣</td> </tr>
+                    <tr> <td>Fast open</td> <td>35%</td> <td>33bar</td> <td>300.0mm</td> <td>فتح سريع</td> </tr>
+                    <tr> <td>Open end</td> <td>22%</td> <td>33bar</td> <td>800.0mm</td> <td>تباطؤ النهاية</td> </tr>
+                </table>
+                <h3>3. إغلاق القالب (Mould Close)</h3>
+                <ul>
+                    <li><strong>Fast clamp:</strong> الإغلاق السريع في البداية لتوفير الوقت.</li>
+                    <li><strong>Clamp 2 & 3:</strong> مراحل الإغلاق المتوسطة.</li>
+                    <li><strong>LP Clamp (Low Pressure Clamp):</strong> الإغلاق بضغط منخفض؛ المرحلة الأهم لحماية القالب.</li>
+                    <li><strong>HP Clamp (High Pressure Clamp):</strong> القفل النهائي بضغط عالٍ بعد التأكد من الإغلاق.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>المرحلة</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>المهمة</th> </tr>
+                    <tr> <td>Fast clamp</td> <td>55%</td> <td>40bar</td> <td>300.0mm</td> <td>إغلاق سريع</td> </tr>
+                    <tr> <td>Clamp 2</td> <td>45%</td> <td>35bar</td> <td>250.0mm</td> <td>مرحلة ٢</td> </tr>
+                    <tr> <td>Clamp 3</td> <td>35%</td> <td>30bar</td> <td>25.0mm</td> <td>مرحلة ٣</td> </tr>
+                    <tr> <td>LP Clamp</td> <td>15%</td> <td>10bar</td> <td>5.00mm</td> <td>ضغط منخفض</td> </tr>
+                    <tr> <td>HP Clamp</td> <td>66%</td> <td>175bar</td> <td>0.03mm</td> <td>القفل النهائي</td> </tr>
+                </table>
+            `,
+            en: `
+                <h2>Mould Open Close Setting</h2>
+                <p>This section controls the mold's opening and closing movements.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. General Information</h3>
+                <ul>
+                    <li><strong>Maximum Mould:</strong> Maximum distance the machine can open the mold.</li>
+                    <li><strong>Maximum Press:</strong> Maximum system hydraulic pressure for moving the mold.</li>
+                    <li><strong>Act Clamp Forc:</strong> The actual force applied to clamp the mold at this moment.</li>
+                    <li><strong>LP Protect (Low Pressure Protection):</strong> Mold protection; detects obstacles to prevent high-pressure damage.</li>
+                </ul>
+                <h3>2. Mould Open Phase</h3>
+                <ul>
+                    <li><strong>Slow open:</strong> Initial slow opening for safe product separation.</li>
+                    <li><strong>Open 2 & 3:</strong> Intermediate opening stages.</li>
+                    <li><strong>Fast open:</strong> Fast opening to reduce cycle time.</li>
+                    <li><strong>Open end:</strong> Deceleration before reaching the final position to avoid mechanical shock.</li>
+                    <li><strong>Syn. Eject (Synchronized Eject):</strong> Synchronizes ejector movement with mold opening.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>Stage</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>Task</th> </tr>
+                    <tr> <td>Slow open</td> <td>15%</td> <td>25bar</td> <td>3.00mm</td> <td>Slow Start</td> </tr>
+                    <tr> <td>Open 2</td> <td>25%</td> <td>45bar</td> <td>10.0mm</td> <td>Stage 2</td> </tr>
+                    <tr> <td>Open 3</td> <td>35%</td> <td>60bar</td> <td>20.0mm</td> <td>Stage 3</td> </tr>
+                    <tr> <td>Fast open</td> <td>35%</td> <td>33bar</td> <td>300.0mm</td> <td>Fast Open</td> </tr>
+                    <tr> <td>Open end</td> <td>22%</td> <td>33bar</td> <td>800.0mm</td> <td>Slow End</td> </tr>
+                </table>
+                <h3>3. Mould Close Phase</h3>
+                <ul>
+                    <li><strong>Fast clamp:</strong> Initial fast closing to save time.</li>
+                    <li><strong>Clamp 2 & 3:</strong> Intermediate closing stages.</li>
+                    <li><strong>LP Clamp (Low Pressure Clamp):</strong> Clamping with low pressure; critical for mold safety.</li>
+                    <li><strong>HP Clamp (High Pressure Clamp):</strong> Final high-pressure locking after confirmed closure.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>Stage</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>Task</th> </tr>
+                    <tr> <td>Fast clamp</td> <td>55%</td> <td>40bar</td> <td>300.0mm</td> <td>Fast Close</td> </tr>
+                    <tr> <td>Clamp 2</td> <td>45%</td> <td>35bar</td> <td>250.0mm</td> <td>Stage 2</td> </tr>
+                    <tr> <td>Clamp 3</td> <td>35%</td> <td>30bar</td> <td>25.0mm</td> <td>Stage 3</td> </tr>
+                    <tr> <td>LP Clamp</td> <td>15%</td> <td>10bar</td> <td>5.00mm</td> <td>Low Press</td> </tr>
+                    <tr> <td>HP Clamp</td> <td>66%</td> <td>175bar</td> <td>0.03mm</td> <td>Final Lock</td> </tr>
+                </table>
+            `,
+            tr: `
+                <h2>Kalıp Açma Kapama Ayarı (Mould Open Close Setting)</h2>
+                <p>Bu bölüm kalıbın açılma ve kapanma hareketlerini kontrol eder.</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. Genel Bilgiler</h3>
+                <ul>
+                    <li><strong>Maximum Mould:</strong> Makinenin kalıbı açabileceği maksimum mesafe.</li>
+                    <li><strong>Maximum Press:</strong> Kalıbı hareket ettirmek için maksimum hidrolik basınç.</li>
+                    <li><strong>Act Clamp Forc:</strong> Şu anda kalıba uygulanan gerçek kilitleme kuvveti.</li>
+                    <li><strong>LP Protect (Low Pressure Protection):</strong> Kalıp koruma; bir engel varsa hasarı önlemek için durur.</li>
+                </ul>
+                <h3>2. Kalıp Açma (Mould Open)</h3>
+                <ul>
+                    <li><strong>Slow open:</strong> Ürünü güvenle ayırmak için başlangıçta yavaş açma.</li>
+                    <li><strong>Open 2 & 3:</strong> Orta açma aşamaları.</li>
+                    <li><strong>Fast open:</strong> Çevrim süresini azaltmak için hızlı açma.</li>
+                    <li><strong>Open end:</strong> Darbeyi önlemek için sona yaklaşırken yavaşlama.</li>
+                    <li><strong>Syn. Eject:</strong> Açma ile eş zamanlı itici hareketi.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>Aşama</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>Görev</th> </tr>
+                    <tr> <td>Slow open</td> <td>15%</td> <td>25bar</td> <td>3.00mm</td> <td>Yavaş Açılış</td> </tr>
+                    <tr> <td>Open 2</td> <td>25%</td> <td>45bar</td> <td>10.0mm</td> <td>2. Aşama</td> </tr>
+                    <tr> <td>Open 3</td> <td>35%</td> <td>60bar</td> <td>20.0mm</td> <td>3. Aşama</td> </tr>
+                    <tr> <td>Fast open</td> <td>35%</td> <td>33bar</td> <td>300.0mm</td> <td>Hızlı Açılış</td> </tr>
+                    <tr> <td>Open end</td> <td>22%</td> <td>33bar</td> <td>800.0mm</td> <td>Yavaş Bitiş</td> </tr>
+                </table>
+                <h3>3. Kalıp Kapama (Mould Close)</h3>
+                <ul>
+                    <li><strong>Fast clamp:</strong> Zaman kazanmak için başlangıçta hızlı kapama.</li>
+                    <li><strong>Clamp 2 & 3:</strong> Orta kapama aşamaları.</li>
+                    <li><strong>LP Clamp (Low Pressure Clamp):</strong> Düşük basınçlı kapama; kalıp emniyeti için en önemli bölüm.</li>
+                    <li><strong>HP Clamp (High Pressure Clamp):</strong> Tam kapandıktan sonra yüksek basınçla kilitleme.</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>Aşama</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>Görev</th> </tr>
+                    <tr> <td>Fast clamp</td> <td>55%</td> <td>40bar</td> <td>300.0mm</td> <td>Hızlı Kapama</td> </tr>
+                    <tr> <td>Clamp 2</td> <td>45%</td> <td>35bar</td> <td>250.0mm</td> <td>2. Aşama</td> </tr>
+                    <tr> <td>Clamp 3</td> <td>35%</td> <td>30bar</td> <td>25.0mm</td> <td>3. Aşama</td> </tr>
+                    <tr> <td>LP Clamp</td> <td>15%</td> <td>10bar</td> <td>5.00mm</td> <td>Düşük Basınç</td> </tr>
+                    <tr> <td>HP Clamp</td> <td>66%</td> <td>175bar</td> <td>0.03mm</td> <td>Son Kilit</td> </tr>
+                </table>
+            `,
+            zh: `
+                <h2>开合模设置 (Mould Open Close Setting)</h2>
+                <p>此部分控制模具的开模和合模动作。</p>
+                <hr style="border:0.5px solid #444">
+                <h3>1. 基本信息</h3>
+                <ul>
+                    <li><strong>Maximum Mould:</strong> 机器允许的最大开模行程。</li>
+                    <li><strong>Maximum Press:</strong> 系统最大液压锁模力。</li>
+                    <li><strong>Act Clamp Forc:</strong> 当前实际锁模力。</li>
+                    <li><strong>LP Protect (低压保护):</strong> 如果模具内有异物，机器会感应并停止以防损坏模具。</li>
+                </ul>
+                <h3>2. 开模阶段 (Mould Open)</h3>
+                <ul>
+                    <li><strong>Slow open:</strong> 初始慢速开模以保护产品分离。</li>
+                    <li><strong>Open 2 & 3:</strong> 中间开模阶段。</li>
+                    <li><strong>Fast open:</strong> 快速开模以缩短循环时间。</li>
+                    <li><strong>Open end:</strong> 到达终点前的减速以防机械冲撞。</li>
+                    <li><strong>Syn. Eject:</strong> 开模同步顶出。</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>阶段</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>任务</th> </tr>
+                    <tr> <td>Slow open</td> <td>15%</td> <td>25bar</td> <td>3.00mm</td> <td>慢速开模</td> </tr>
+                    <tr> <td>Open 2</td> <td>25%</td> <td>45bar</td> <td>10.0mm</td> <td>阶段 2</td> </tr>
+                    <tr> <td>Open 3</td> <td>35%</td> <td>60bar</td> <td>20.0mm</td> <td>阶段 3</td> </tr>
+                    <tr> <td>Fast open</td> <td>35%</td> <td>33bar</td> <td>300.0mm</td> <td>快速开模</td> </tr>
+                    <tr> <td>Open end</td> <td>22%</td> <td>33bar</td> <td>800.0mm</td> <td>末端减速</td> </tr>
+                </table>
+                <h3>3. 合模阶段 (Mould Close)</h3>
+                <ul>
+                    <li><strong>Fast clamp:</strong> 初始快速合模以节省时间。</li>
+                    <li><strong>Clamp 2 & 3:</strong> 中间合模阶段。</li>
+                    <li><strong>LP Clamp (低压合模):</strong> 以低压闭合模具，最重要的安全保护。</li>
+                    <li><strong>HP Clamp (高压锁模):</strong> 确认闭合后高压锁定。</li>
+                </ul>
+                <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+                    <tr style="background: #333;"> <th>阶段</th> <th>Sp.</th> <th>Pr.</th> <th>Pos.</th> <th>任务</th> </tr>
+                    <tr> <td>Fast clamp</td> <td>55%</td> <td>40bar</td> <td>300.0mm</td> <td>快速合模</td> </tr>
+                    <tr> <td>Clamp 2</td> <td>45%</td> <td>35bar</td> <td>250.0mm</td> <td>阶段 2</td> </tr>
+                    <tr> <td>Clamp 3</td> <td>35%</td> <td>30bar</td> <td>25.0mm</td> <td>阶段 3</td> </tr>
+                    <tr> <td>LP Clamp</td> <td>15%</td> <td>10bar</td> <td>5.00mm</td> <td>低压保护</td> </tr>
+                    <tr> <td>HP Clamp</td> <td>66%</td> <td>175bar</td> <td>0.03mm</td> <td>高压锁模</td> </tr>
+                </table>
+            `
+        },
+
+        timer: {
+            ku: `
+                <h2>Timer Setting (ڕێکخستنی کاتەکان)</h2>
+                <hr style="border:0.5px solid #444">
+                <ul>
+                    <li><strong>1. PLAST DLY. (Plasticizing Delay):</strong> کاتی دواکەوتنی پلاستیککردن. ئامێرەکە چەند چرکە بوەستێت دوای لێدان، ئینجا دەست بکات بە پلاستیککردن.</li>
+                    <li><strong>2. COOLING:</strong> کاتی ساردکردنەوە. ئەو ماوەیەیە کە قاڵبەکە بە داخراوی دەمێنێتەوە بۆ ئەوەی بەرهەمەکە ڕەق بێت.</li>
+                    <li><strong>3. RECYCLE:</strong> کاتی چاوەڕوانی نێوان دوو سووڕ (Cycle). لە دۆخی ئۆتۆماتیکدا، ئامێرەکە چەند چرکە بوەستێت پێش دەستپێکردنەوەی سووڕی داهاتوو.</li>
+                    <li><strong>4. MELT BEF PLA (Melt Before Plast):</strong> کاتی سەکباک (Decompression) پێش دەستپێکردنی پلاستیککردن.</li>
+                    <li><strong>5. CYCLE TIMER:</strong> زۆرترین کاتی ڕێپێدراو بۆ یەک سووڕی تەواو. ئەگەر سووڕەکە لەم کاتە زیاتری پێ چوو، ئامێرەکە زەنگ لێ دەدات (Alarm).</li>
+                    <li><strong>6. EJE OUT DLY (Ejector Out Delay):</strong> کاتی دواکەوتنی دەرپەڕێنەر بەرەو پێشەوە دوای کردنەوەی قاڵب.</li>
+                    <li><strong>7. LOW PR. DETEC (Low Pressure Detection):</strong> کاتی چاودێری پەستانی نزم بۆ پاراستنی قاڵب. ئەگەر قاڵبەکە لەم کاتەدا دانەخرا، ئامێرەکە دەوەستێت.</li>
+                    <li><strong>8. DLY CL. AO (Delay Close Auto):</strong> کاتی دواکەوتنی داخستنی قاڵب لە دۆخی ئۆتۆماتیکدا.</li>
+                    <li><strong>9. DLY CLAMP (Delay Clamp):</strong> کاتی دواکەوتنی چەقاندنی قاڵب (High Pressure Clamp).</li>
+                    <li><strong>10. CLAMP END DL (Clamp End Delay):</strong> کاتی دواکەوتنی تەواوبوونی چەقاندن پێش دەستپێکردنی لێدان.</li>
+                    <li><strong>11. VIB EJECT (Vibration Ejector):</strong> کاتی لەرینەوەی دەرپەڕێنەر بۆ ئەوەی بەرهەمەکە بە ئاسانی بکەوێت.</li>
+                    <li><strong>12. CARR. BWD DLY (Carriage Backward Delay):</strong> کاتی دواکەوتنی گەڕانەوەی یەکەی لێدان (Carriage) بەرەو دواوە.</li>
+                    <li><strong>13. DLY INJECT (Delay Inject):</strong> کاتی دواکەوتنی دەستپێکردنی لێدان.</li>
+                    <li><strong>14. PURGE BUFFER:</strong> کاتی مانەوەی ماددە لە کاتی پاککردنەوەدا (Purge).</li>
+                    <li><strong>15. DLY OP. AO (Delay Open Auto):</strong> کاتی دواکەوتنی کردنەوەی قاڵب لە دۆخی ئۆتۆماتیکدا.</li>
+                    <li><strong>16. DLY OPEN (Delay Open):</strong> کاتی دواکەوتنی گشتی بۆ کردنەوەی قاڵب.</li>
+                </ul>
+                <hr style="border:0.5px solid #444">
+                <h3>Counters & Monitor (ژمێرەر و چاودێری)</h3>
+                <ul>
+                    <li><strong>1. CYCLE No.:</strong> ژمارەی سووڕەکان. نیشان دەدات تا ئێستا چەند دانە بەرهەم دروست کراوە.</li>
+                    <li><strong>2. REJECT No.:</strong> ژمارەی ئەو بەرهەمانەی کە بەهۆی کێشەوە ڕەتکراونەتەوە.</li>
+                    <li><strong>3. PRODUCT TIME:</strong> کاتی بەرهەمهێنانی یەک دانە بەرهەم بە کرداری.</li>
+                    <li><strong>4. LUB. 2 CYCLE:</strong> ژمارەی سووڕەکان لە نێوان دوو چەورکردنی (Lubrication) ئامێرەکەدا.</li>
+                    <li><strong>5. CYCLE MONIT (Cycle Monitor):</strong> کاتی چاودێری سووڕەکە بۆ دڵنیابوون لە جێگیری.</li>
+                    <li><strong>6. FORCE BWD (Force Backward):</strong> هێزی گەڕانەوەی دەرپەڕێنەر یان کۆرەکان.</li>
+                    <li><strong>7. FORCE FWD (Force Forward):</strong> هێزی چوونە پێشەوەی دەرپەڕێنەر یان کۆرەکان.</li>
+                    <li><strong>8. GATE CORE:</strong> کاتی جووڵەی کۆرەکان (Cores) ئەگەر لە قاڵبەکەدا هەبن.</li>
+                    <li><strong>9. UNSCREW IN C (Unscrew In Cycle):</strong> کاتی سووڕانەوەی بزمارەی ناو قاڵب.</li>
+                    <li><strong>10. UNSCREW OT C (Unscrew Out Cycle):</strong> کاتی سووڕانەوەی بزمارەی قاڵب لە کاتی کردنەوەدا.</li>
+                </ul>
+            `,
+            ar: `
+                <h2>إعدادات المؤقتات (Timer Setting)</h2>
+                <hr style="border:0.5px solid #444">
+                <ul>
+                    <li><strong>1. PLAST DLY. (Plasticizing Delay):</strong> وقت تأخير التلدين؛ كم ثانية تنتظر الماكينة بعد الحقن قبل بدء التلدين.</li>
+                    <li><strong>2. COOLING:</strong> وقت التبريد؛ المدة التي يظل فيها القالب مغلقاً ليتصلب المنتج.</li>
+                    <li><strong>3. RECYCLE:</strong> وقت الانتظار بين دورتين (Cycle) في الوضع الأوتوماتيكي قبل بدء الدورة التالية.</li>
+                    <li><strong>4. MELT BEF PLA (Melt Before Plast):</strong> وقت الساكبك (Decompression) قبل بدء عملية التلدين.</li>
+                    <li><strong>5. CYCLE TIMER:</strong> أقصى وقت مسموح به للدورة الكاملة؛ إذا تجاوزه الوقت تطلق الماكينة إنذاراً (Alarm).</li>
+                    <li><strong>6. EJE OUT DLY (Ejector Out Delay):</strong> وقت تأخير خروج القاذف للأمام بعد فتح القالب.</li>
+                    <li><strong>7. LOW PR. DETEC (Low Pressure Detection):</strong> وقت مراقبة الضغط المنخفض لحماية القالب؛ إذا لم يغلق القالب تتوقف الماكينة.</li>
+                    <li><strong>8. DLY CL. AO (Delay Close Auto):</strong> وقت تأخير إغلاق القالب في الوضع الأوتوماتيكي.</li>
+                    <li><strong>9. DLY CLAMP (Delay Clamp):</strong> وقت تأخير قفل القالب بالضغط العالي (High Pressure Clamp).</li>
+                    <li><strong>10. CLAMP END DL (Clamp End Delay):</strong> وقت تأخير نهاية القفل قبل بدء عملية الحقن.</li>
+                    <li><strong>11. VIB EJECT (Vibration Ejector):</strong> وقت اهتزاز القاذف لضمان سقوط المنتج بسهولة.</li>
+                    <li><strong>12. CARR. BWD DLY (Carriage Backward Delay):</strong> وقت تأخير رجوع وحدة الحقن (Carriage) للخلف.</li>
+                    <li><strong>13. DLY INJECT (Delay Inject):</strong> وقت تأخير بدء عملية الحقن.</li>
+                    <li><strong>14. PURGE BUFFER:</strong> وقت بقاء المادة أثناء عملية التنظيف (Purge).</li>
+                    <li><strong>15. DLY OP. AO (Delay Open Auto):</strong> وقت تأخير فتح القالب في الوضع الأوتوماتيكي.</li>
+                    <li><strong>16. DLY OPEN (Delay Open):</strong> وقت التأخير العام لفتح القالب.</li>
+                </ul>
+                <hr style="border:0.5px solid #444">
+                <h3>العدادات والمراقبة (Counters & Monitor)</h3>
+                <ul>
+                    <li><strong>1. CYCLE No.:</strong> عدد الدورات؛ يوضح عدد القطع المنتجة حتى الآن.</li>
+                    <li><strong>2. REJECT No.:</strong> عدد المنتجات المرفوضة بسبب المشاكل.</li>
+                    <li><strong>3. PRODUCT TIME:</strong> الوقت الفعلي المستغرق لإنتاج قطعة واحدة.</li>
+                    <li><strong>4. LUB. 2 CYCLE:</strong> عدد الدورات بين كل عمليتي تزييت (Lubrication) للماكينة.</li>
+                    <li><strong>5. CYCLE MONIT (Cycle Monitor):</strong> وقت مراقبة الدورة لضمان استقرار الإنتاج.</li>
+                    <li><strong>6. FORCE BWD (Force Backward):</strong> قوة رجوع القاذف أو القلوب (Cores).</li>
+                    <li><strong>7. FORCE FWD (Force Forward):</strong> قوة تقدم القاذف أو القلوب (Cores).</li>
+                    <li><strong>8. GATE CORE:</strong> وقت حركة القلوب (Cores) إذا كانت موجودة في القالب.</li>
+                    <li><strong>9. UNSCREW IN C (Unscrew In Cycle):</strong> وقت دوران البرغي داخل القالب.</li>
+                    <li><strong>10. UNSCREW OT C (Unscrew Out Cycle):</strong> وقت دوران برغي القالب أثناء الفتح.</li>
+                </ul>
+            `,
+            en: `
+                <h2>Timer Setting</h2>
+                <hr style="border:0.5px solid #444">
+                <ul>
+                    <li><strong>1. PLAST DLY. (Plasticizing Delay):</strong> How many seconds the machine waits after injection before starting plasticizing.</li>
+                    <li><strong>2. COOLING:</strong> The duration the mold remains closed to allow the product to solidify.</li>
+                    <li><strong>3. RECYCLE:</strong> Wait time between two cycles in automatic mode before starting the next cycle.</li>
+                    <li><strong>4. MELT BEF PLA (Melt Before Plast):</strong> Decompression time (Suck-back) before plasticizing begins.</li>
+                    <li><strong>5. CYCLE TIMER:</strong> Maximum allowed time for one full cycle; triggers an Alarm if exceeded.</li>
+                    <li><strong>6. EJE OUT DLY (Ejector Out Delay):</strong> Delay time before the ejector moves forward after mold opening.</li>
+                    <li><strong>7. LOW PR. DETEC (Low Pressure Detection):</strong> Monitoring time for low pressure mold protection; stops the machine if mold doesn't close.</li>
+                    <li><strong>8. DLY CL. AO (Delay Close Auto):</strong> Delay before mold closing in automatic mode.</li>
+                    <li><strong>9. DLY CLAMP (Delay Clamp):</strong> Delay time before high pressure clamping starts.</li>
+                    <li><strong>10. CLAMP END DL (Clamp End Delay):</strong> Delay after clamping is finished before injection starts.</li>
+                    <li><strong>11. VIB EJECT (Vibration Ejector):</strong> Vibration time for the ejector to ensure parts drop easily.</li>
+                    <li><strong>12. CARR. BWD DLY (Carriage Backward Delay):</strong> Delay before the injection unit (Carriage) moves backward.</li>
+                    <li><strong>13. DLY INJECT (Delay Inject):</strong> Delay time before the injection phase starts.</li>
+                    <li><strong>14. PURGE BUFFER:</strong> Material retention time during the purging process.</li>
+                    <li><strong>15. DLY OP. AO (Delay Open Auto):</strong> Delay before mold opening in automatic mode.</li>
+                    <li><strong>16. DLY OPEN (Delay Open):</strong> Overall delay time for opening the mold.</li>
+                </ul>
+                <hr style="border:0.5px solid #444">
+                <h3>Counters & Monitor</h3>
+                <ul>
+                    <li><strong>1. CYCLE No.:</strong> Total cycle count; shows how many parts have been produced so far.</li>
+                    <li><strong>2. REJECT No.:</strong> Number of products rejected due to issues.</li>
+                    <li><strong>3. PRODUCT TIME:</strong> Actual production time for one single part.</li>
+                    <li><strong>4. LUB. 2 CYCLE:</strong> Cycles between two automatic machine lubrication sequences.</li>
+                    <li><strong>5. CYCLE MONIT (Cycle Monitor):</strong> Monitoring cycle time consistency for stability.</li>
+                    <li><strong>6. FORCE BWD (Force Backward):</strong> Backward force for ejectors or cores.</li>
+                    <li><strong>7. FORCE FWD (Force Forward):</strong> Forward force for ejectors or cores.</li>
+                    <li><strong>8. GATE CORE:</strong> Movement time for mold cores if they exist.</li>
+                    <li><strong>9. UNSCREW IN C (Unscrew In Cycle):</strong> Rotation time for the screw inside the mold.</li>
+                    <li><strong>10. UNSCREW OT C (Unscrew Out Cycle):</strong> Mold screw rotation time during opening.</li>
+                </ul>
+            `,
+            tr: `
+                <h2>Timer Setting (Zamanlayıcı Ayarları)</h2>
+                <hr style="border:0.5px solid #444">
+                <ul>
+                    <li><strong>1. PLAST DLY. (Plasticizing Delay):</strong> Plastikleştirme gecikmesi; enjeksiyondan sonra makinenin kaç saniye bekleyeceği.</li>
+                    <li><strong>2. COOLING:</strong> Soğutma süresi; ürünün sertleşmesi için kalıbın kapalı kaldığı süre.</li>
+                    <li><strong>3. RECYCLE:</strong> Otomatik modda bir sonraki çevrim başlamadan önceki bekleme süresi.</li>
+                    <li><strong>4. MELT BEF PLA (Melt Before Plast):</strong> Plastikleştirme başlamadan önceki geri emme (Decompression) süresi.</li>
+                    <li><strong>5. CYCLE TIMER:</strong> Bir tam çevrim için izin verilen maksimum süre; aşılırsa Alarm verir.</li>
+                    <li><strong>6. EJE OUT DLY (Ejector Out Delay):</strong> Kalıp açıldıktan sonra iticinin ileri çıkma gecikmesi.</li>
+                    <li><strong>7. LOW PR. DETEC (Low Pressure Detection):</strong> Düşük basınç kalıp koruma izleme süresi.</li>
+                    <li><strong>8. DLY CL. AO (Delay Close Auto):</strong> Otomatik modda kalıp kapama gecikmesi.</li>
+                    <li><strong>9. DLY CLAMP (Delay Clamp):</strong> Yüksek basınç kilitleme (High Pressure Clamp) gecikme süresi.</li>
+                    <li><strong>10. CLAMP END DL (Clamp End Delay):</strong> Kilitleme bittikten sonra enjeksiyon başlamadan önceki gecikme.</li>
+                    <li><strong>11. VIB EJECT (Vibration Ejector):</strong> Ürünün kolay düşmesi için itici titreşim süresi.</li>
+                    <li><strong>12. CARR. BWD DLY (Carriage Backward Delay):</strong> Enjeksiyon ünitesinin (Carriage) geri çekilme gecikmesi.</li>
+                    <li><strong>13. DLY INJECT (Delay Inject):</strong> Enjeksiyon başlama gecikme süresi.</li>
+                    <li><strong>14. PURGE BUFFER:</strong> Temizlik (Purge) işlemi sırasında malzemenin bekleme süresi.</li>
+                    <li><strong>15. DLY OP. AO (Delay Open Auto):</strong> Otomatik modda kalıp açma gecikmesi.</li>
+                    <li><strong>16. DLY OPEN (Delay Open):</strong> Kalıp açılmadan önceki genel gecikme süresi.</li>
+                </ul>
+                <hr style="border:0.5px solid #444">
+                <h3>Counters & Monitor (Sayaçlar ve İzleme)</h3>
+                <ul>
+                    <li><strong>1. CYCLE No.:</strong> Çevrim sayısı; toplam kaç parça üretildiğini gösterir.</li>
+                    <li><strong>2. REJECT No.:</strong> Sorunlar nedeniyle reddedilen ürün sayısı.</li>
+                    <li><strong>3. PRODUCT TIME:</strong> Bir adet ürünün üretilmesi için geçen gerçek süre.</li>
+                    <li><strong>4. LUB. 2 CYCLE:</strong> İki yağlama (Lubrication) arasındaki çevrim sayısı.</li>
+                    <li><strong>5. CYCLE MONIT (Cycle Monitor):</strong> Kararlılık için çevrim süresi izleme.</li>
+                    <li><strong>6. FORCE BWD (Force Backward):</strong> İtici veya maçaların geri çekilme kuvveti.</li>
+                    <li><strong>7. FORCE FWD (Force Forward):</strong> İtici veya maçaların ileri gitme kuvveti.</li>
+                    <li><strong>8. GATE CORE:</strong> Kalıptaki maçaların (Cores) hareket süresi.</li>
+                    <li><strong>9. UNSCREW IN C (Unscrew In Cycle):</strong> Kalıp içi vida dönüş süresi.</li>
+                    <li><strong>10. UNSCREW OT C (Unscrew Out Cycle):</strong> Açılış sırasında kalıp vidası dönüş süresi.</li>
+                </ul>
+            `,
+            zh: `
+                <h2>Timer Setting (时间设置)</h2>
+                <hr style="border:0.5px solid #444">
+                <ul>
+                    <li><strong>1. PLAST DLY. (Plasticizing Delay):</strong> 熔胶延迟；注射完成后，机器在开始熔胶前等待的秒数。</li>
+                    <li><strong>2. COOLING:</strong> 冷却时间；模具保持闭合以使产品固化的时长。</li>
+                    <li><strong>3. RECYCLE:</strong> 自动模式下两个循环 (Cycle) 之间的等待时间。</li>
+                    <li><strong>4. MELT BEF PLA (Melt Before Plast):</strong> 熔胶开始前的倒索（抽芯）时间。</li>
+                    <li><strong>5. CYCLE TIMER:</strong> 单次循环允许的最大时间；如果超时将触发报警 (Alarm)。</li>
+                    <li><strong>6. EJE OUT DLY (Ejector Out Delay):</strong> 开模后顶针前进前的延迟时间。</li>
+                    <li><strong>7. LOW PR. DETEC (Low Pressure Detection):</strong> 低压模具保护监视时间；如果模具未闭合则停机。</li>
+                    <li><strong>8. DLY CL. AO (Delay Close Auto):</strong> 自动模式下的合模延迟时间。</li>
+                    <li><strong>9. DLY CLAMP (Delay Clamp):</strong> 高压锁模前的延迟时间。</li>
+                    <li><strong>10. CLAMP END DL (Clamp End Delay):</strong> 锁模完成至射胶开始前的延迟时间。</li>
+                    <li><strong>11. VIB EJECT (Vibration Ejector):</strong> 顶针振动时间，确保产品顺利脱离。</li>
+                    <li><strong>12. CARR. BWD DLY (Carriage Backward Delay):</strong> 射台（座台）后退延迟时间。</li>
+                    <li><strong>13. DLY INJECT (Delay Inject):</strong> 射胶开始前的延迟时间。</li>
+                    <li><strong>14. PURGE BUFFER:</strong> 清料 (Purge) 过程中的停留时间。</li>
+                    <li><strong>15. DLY OP. AO (Delay Open Auto):</strong> 自动模式下的开模延迟时间。</li>
+                    <li><strong>16. DLY OPEN (Delay Open):</strong> 开模前的总延迟时间。</li>
+                </ul>
+                <hr style="border:0.5px solid #444">
+                <h3>Counters & Monitor (计数器与监视)</h3>
+                <ul>
+                    <li><strong>1. CYCLE No.:</strong> 循环次数；显示迄今为止已生产的产品总量。</li>
+                    <li><strong>2. REJECT No.:</strong> 因问题而被剔除的不良品计数。</li>
+                    <li><strong>3. PRODUCT TIME:</strong> 生产单件产品的实际耗时。</li>
+                    <li><strong>4. LUB. 2 CYCLE:</strong> 两次自动润滑 (Lubrication) 之间的循环次数。</li>
+                    <li><strong>5. CYCLE MONIT (Cycle Monitor):</strong> 循环时间稳定性监视。</li>
+                    <li><strong>6. FORCE BWD (Force Backward):</strong> 顶针或抽芯的后退力。</li>
+                    <li><strong>7. FORCE FWD (Force Forward):</strong> 顶针或抽芯的前进力。</li>
+                    <li><strong>8. GATE CORE:</strong> 模具抽芯 (Cores) 的动作时间（如果存在）。</li>
+                    <li><strong>9. UNSCREW IN C (Unscrew In Cycle):</strong> 模内旋开动作时间。</li>
+                    <li><strong>10. UNSCREW OT C (Unscrew Out Cycle):</strong> 开模旋开动作时间。</li>
+                </ul>
+            `
+        },
+        purge: {
+            ku: `
+                <h2>Auto Purge Setting (ڕێکخستنی پاککردنەوەی خۆکار)</h2>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>١. بەشی ڕاست: ڕێکخستنی پاککردنەوە (PURGE)</h3>
+                <p>ئەمە بەشە سەرەکییەکەیە کە کۆنترۆڵی جووڵەی بزمارە دەکات لە کاتی پاککردنەوەدا:</p>
+                <ul>
+                    <li><strong>PURGE (4t):</strong> ژمارەی لێدانەکانی پاککردنەوە. لێرەدا لەسەر 4t دانراوە، واتە ئامێرەکە ٤ جار پرۆسەی پلاستیککردن و لێدان دووبارە دەکاتەوە.</li>
+                    <li><strong>Plast (پلاستیککردن):</strong> ڕێکخستنی سووڕانەوەی بزمارە بۆ کۆکردنەوەی ماددەی پاککەرەوە.</li>
+                    <li><strong>Inject (لێدان):</strong> ڕێکخستنی پاڵنانی ماددەکە بۆ دەرەوەی دەمی دەرچوون (Nozzle).</li>
+                    <li><strong>Decomp (سەکباک):</strong> کێشانەوەی بزمارە بۆ دواوە دوای لێدان بۆ بڕینی پەستان.</li>
+                </ul>
+                <p><strong>پارامێتەرەکانی ناو خشتەکە:</strong></p>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> خێرایی جووڵەی بزمارە.</li>
+                    <li><strong>Pr. (Pressure):</strong> پەستانی هایدرۆلیکی بەکارهاتوو.</li>
+                    <li><strong>Bp. (Back Pressure):</strong> پەستانی پشتەوە لە کاتی پلاستیککردندا بۆ تێکەڵکردنی باشتر.</li>
+                    <li><strong>Time / Pos.:</strong> کات (بۆ پلاستیککردن) یان شوێنی بزمارە (بۆ لێدان و سەکباک) کە تێیدا قۆناغەکە کۆتایی دێت.</li>
+                </ul>
+
+                <h3>٢. بەشی چەپ (سەرەوە): ڕێکخستنی گاز (Gas)</h3>
+                <ul>
+                    <li><strong>Gas (ON/OFF):</strong> چالاککردن یان ناچالاککردنی لێدانی گاز لە کاتی پاککردنەوەدا.</li>
+                    <li><strong>Pos.:</strong> ئەو شوێنەی بزمارە کە تێیدا گازەکە لێ دەدرێت.</li>
+                    <li><strong>DELAY:</strong> کاتی دواکەوتنی لێدانی گاز.</li>
+                </ul>
+
+                <h3>٣. بەشی چەپ (خوارەوە): دەرپەڕاندنی بەردەوام (EXTRUSION)</h3>
+                <p>ئەمە شێوازێکی تری پاککردنەوەیە کە تێیدا بزمارەکە بە بەردەوامی دەسوڕێتەوە بێ ئەوەی لێدان بکات:</p>
+                <ul>
+                    <li><strong>EXTRUSION (ON/OFF):</strong> چالاککردنی سووڕانەوەی بەردەوامی بزمارە بۆ ئەوەی ماددەکە بە بەردەوامی بێتە دەرەوە.</li>
+                    <li><strong>Sp. & Pr.:</strong> خێرایی و پەستانی سووڕانەوەکە.</li>
+                    <li><strong>Time:</strong> ئەو ماوەیەی کە بزمارەکە تێیدا بە بەردەوامی دەسوڕێتەوە.</li>
+                </ul>
+            `,
+            ar: `
+                <h2>إعدادات التنظيف التلقائي (Auto Purge Setting)</h2>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. القسم الأيمن: إعدادات التنظيف (PURGE)</h3>
+                <p>هذا هو القسم الرئيسي الذي يتحكم في حركة البرغي أثناء عملية التنظيف:</p>
+                <ul>
+                    <li><strong>PURGE (4t):</strong> يشير إلى عدد مرات التنظيف. هنا مضبوط على 4t، مما يعني أن الماكينة ستكرر عملية (التلدين والحقن) 4 مرات.</li>
+                    <li><strong>Plast (التلدين):</strong> ضبط دوران البرغي لتجميع مادة التنظيف.</li>
+                    <li><strong>Inject (الحقن):</strong> ضبط دفع المادة خارج الفوهة (Nozzle).</li>
+                    <li><strong>Decomp (سحب البرغي):</strong> سحب البرغي للخلف بعد الحقن لتقليل الضغط.</li>
+                </ul>
+                <p><strong>المعلمات الموجودة في الجدول:</strong></p>
+                <ul>
+                    <li><strong>Sp. (السرعة):</strong> سرعة حركة البرغي.</li>
+                    <li><strong>Pr. (الضغط):</strong> الضغط الهيدروليكي المستخدم.</li>
+                    <li><strong>Bp. (الضغط العكسي):</strong> الضغط الخلفي أثناء التلدين لخلط المادة بشكل أفضل.</li>
+                    <li><strong>Time / Pos.:</strong> الوقت (للتلدين) أو موضع البرغي (للحقن والسحب) حيث تنتهي المرحلة.</li>
+                </ul>
+
+                <h3>2. القسم الأيسر (الأعلى): إعدادات الغاز (Gas)</h3>
+                <ul>
+                    <li><strong>Gas (ON/OFF):</strong> تفعيل أو تعطيل حقن الغاز أثناء عملية التنظيف.</li>
+                    <li><strong>Pos.:</strong> موضع البرغي الذي يتم عنده حقن الغاز.</li>
+                    <li><strong>DELAY:</strong> وقت تأخير حقن الغاز.</li>
+                </ul>
+
+                <h3>3. القسم الأيسر (الأسفل): البثق المستمر (EXTRUSION)</h3>
+                <p>هذه طريقة أخرى للتنظيف حيث يدور البرغي باستمرار دون القيام بعملية حقن:</p>
+                <ul>
+                    <li><strong>EXTRUSION (ON/OFF):</strong> تفعيل الدوران المستمر للبرغي لتخرج المادة بشكل متواصل.</li>
+                    <li><strong>Sp. & Pr.:</strong> سرعة وضغط الدوران.</li>
+                    <li><strong>Time:</strong> المدة الزمنية التي يدور فيها البرغي باستمرار.</li>
+                </ul>
+            `,
+            en: `
+                <h2>Auto Purge Setting</h2>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. Right Section: Purge Settings (PURGE)</h3>
+                <p>This is the main section that controls the screw movement during the cleaning process:</p>
+                <ul>
+                    <li><strong>PURGE (4t):</strong> Indicates the number of purge strokes. Set to 4t, meaning the machine repeats the (plasticizing and injection) process 4 times.</li>
+                    <li><strong>Plast (Plasticizing):</strong> Setting the screw rotation to accumulate the cleaning material.</li>
+                    <li><strong>Inject (Injection):</strong> Setting the material to be pushed out through the nozzle.</li>
+                    <li><strong>Decomp (Decompression/Suck-back):</strong> Pulling the screw back after injection to release pressure.</li>
+                </ul>
+                <p><strong>Table Parameters:</strong></p>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> Screw movement speed.</li>
+                    <li><strong>Pr. (Pressure):</strong> Hydraulic pressure used.</li>
+                    <li><strong>Bp. (Back Pressure):</strong> Back pressure during plasticizing for better mixing.</li>
+                    <li><strong>Time / Pos.:</strong> Time (for plasticizing) or screw position (for injection and decompression) where the stage ends.</li>
+                </ul>
+
+                <h3>2. Left Section (Top): Gas Injection Settings (Gas)</h3>
+                <ul>
+                    <li><strong>Gas (ON/OFF):</strong> Enables or disables gas injection during the purging process.</li>
+                    <li><strong>Pos.:</strong> The screw position at which the gas is injected.</li>
+                    <li><strong>DELAY:</strong> Delay time for gas injection.</li>
+                </ul>
+
+                <h3>3. Left Section (Bottom): Continuous Extrusion (EXTRUSION)</h3>
+                <p>This is another cleaning method where the screw rotates continuously without performing a separate injection stroke:</p>
+                <ul>
+                    <li><strong>EXTRUSION (ON/OFF):</strong> Activates continuous screw rotation so the material comes out steadily.</li>
+                    <li><strong>Sp. & Pr.:</strong> Rotation speed and pressure.</li>
+                    <li><strong>Time:</strong> The duration for which the screw rotates continuously.</li>
+                </ul>
+            `,
+            tr: `
+                <h2>Otomatik Temizleme Ayarı (Auto Purge Setting)</h2>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. Sağ Bölüm: Temizleme Ayarları (PURGE)</h3>
+                <p>Temizleme işlemi sırasında vida hareketini kontrol eden ana bölümdür:</p>
+                <ul>
+                    <li><strong>PURGE (4t):</strong> Temizleme vuruş sayısını gösterir. 4t olarak ayarlandığında, makine (plastikleştirme ve enjeksiyon) işlemini 4 kez tekrarlar.</li>
+                    <li><strong>Plast (Plastikleştirme):</strong> Temizleme malzemesini biriktirmek için vida dönüş ayarı.</li>
+                    <li><strong>Inject (Enjeksiyon):</strong> Malzemenin memeden (Nozzle) dışarı itilme ayarı.</li>
+                    <li><strong>Decomp (Geri Emme):</strong> Basıncı düşürmek için enjeksiyondan sonra vidayı geri çekme.</li>
+                </ul>
+                <p><strong>Tablo Parametreleri:</strong></p>
+                <ul>
+                    <li><strong>Sp. (Hız):</strong> Vida hareket hızı.</li>
+                    <li><strong>Pr. (Basınç):</strong> Kullanılan hidrolik basınç.</li>
+                    <li><strong>Bp. (Geri Basınç):</strong> Daha iyi karışım için plastikleştirme sırasındaki karşı basınç.</li>
+                    <li><strong>Time / Pos.:</strong> Aşamanın sona erdiği süre (plastikleştirme için) veya vida konumu (enjeksiyon ve geri emme için).</li>
+                </ul>
+
+                <h3>2. Sol Üst Bölüm: Gaz Ayarları (Gas)</h3>
+                <ul>
+                    <li><strong>Gas (ON/OFF):</strong> Temizleme sırasında gaz enjeksiyonunu etkinleştirir veya devre dışı bırakır.</li>
+                    <li><strong>Pos.:</strong> Gazın enjekte edildiği vida konumu.</li>
+                    <li><strong>DELAY:</strong> Gaz enjeksiyonu gecikme süresi.</li>
+                </ul>
+
+                <h3>3. Sol Alt Bölüm: Sürekli Ekstrüzyon (EXTRUSION)</h3>
+                <p>Vidanın enjeksiyon yapmadan sürekli döndüğü bir diğer temizleme yöntemidir:</p>
+                <ul>
+                    <li><strong>EXTRUSION (ON/OFF):</strong> Malzemenin sürekli dışarı çıkması için vidanın kesintisiz dönüşünü etkinleştirir.</li>
+                    <li><strong>Sp. & Pr.:</strong> Dönüş hızı ve basıncı.</li>
+                    <li><strong>Time:</strong> Vidanın sürekli döneceği süre.</li>
+                </ul>
+            `,
+            zh: `
+                <h2>自动清洗设置 (Auto Purge Setting)</h2>
+                <hr style="border:0.5px solid #444">
+                
+                <h3>1. 右侧部分：清洗设置 (PURGE)</h3>
+                <p>这是在清洗过程中控制螺杆动作的主要部分：</p>
+                <ul>
+                    <li><strong>PURGE (4t):</strong> 显示清洗次数。在此设置为 4t，表示机器将重复 4 次（熔胶和注射）过程。</li>
+                    <li><strong>Plast (熔胶):</strong> 设置螺杆旋转以积聚清洗物料。</li>
+                    <li><strong>Inject (注射):</strong> 设置将物料推出射嘴 (Nozzle) 的动作。</li>
+                    <li><strong>Decomp (倒索):</strong> 注射后将螺杆后退以泄压。</li>
+                </ul>
+                <p><strong>表中的参数：</strong></p>
+                <ul>
+                    <li><strong>Sp. (速度):</strong> 螺杆运动速度。</li>
+                    <li><strong>Pr. (压力):</strong> 使用的液压压力。</li>
+                    <li><strong>Bp. (背压):</strong> 熔胶时的背压，以获得更好的混合效果。</li>
+                    <li><strong>Time / Pos.:</strong> 阶段结束的时间（用于熔胶）或螺杆位置（用于注射和倒索）。</li>
+                </ul>
+
+                <h3>2. 左上部分：气辅设置 (Gas)</h3>
+                <ul>
+                    <li><strong>Gas (ON/OFF):</strong> 在清洗过程中开启或关闭气体注射。</li>
+                    <li><strong>Pos.:</strong> 注射气体的螺杆位置。</li>
+                    <li><strong>DELAY:</strong> 气体注射延迟时间。</li>
+                </ul>
+
+                <h3>3. 左下部分：连续挤出 (EXTRUSION)</h3>
+                <p>这是另一种清洗方式，螺杆持续旋转而不进行注射：</p>
+                <ul>
+                    <li><strong>EXTRUSION (ON/OFF):</strong> 激活螺杆持续旋转，使物料像“条状”一样连续排出。</li>
+                    <li><strong>Sp. & Pr.:</strong> 旋转的速度和压力。</li>
+                    <li><strong>Time:</strong> 螺杆持续旋转的时间。</li>
+                </ul>
+            `
+        },
+        ejector: {
+            ku: `
+                <h2>Ejector Setting (ڕێکخستنی دەرپەڕێنەر)</h2>
+                <p>ئەم شاشەیە کۆنترۆڵی چۆنیەتی چوونە پێشەوە و گەڕانەوەی دەرپەڕێنەر (Ejector) دەکات:</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>١. ڕێکخستنە گشتییەکانی سەرەوە</h3>
+                <ul>
+                    <li><strong>Max. Stroke (265.0mm):</strong> زۆرترین مەودایە کە دەرپەڕێنەرەکە دەتوانێت تێیدا بچێتە پێشەوە.</li>
+                    <li><strong>Eject Mode (Multi):</strong> دۆخی دەرپەڕاندن نیشان دەدات. لێرەدا لەسەر Multi دانراوە، واتە دەرپەڕێنەرەکە دەتوانێت چەند جارێک بچێت و بێت بۆ دڵنیابوون لە فڕێدانی بەرهەمەکە. (دۆخی تری وەک Single یان Hold هەیە).</li>
+                    <li><strong>Eject In Aux:</strong> جووڵەی یاریدەدەری دەرپەڕێنەر لە کاتی گەڕانەوەدا.</li>
+                    <li><strong>EJECT PAUSE:</strong> کاتی وەستان یان پشوو لە نێوان لێدانەکانی دەرپەڕێنەردا.</li>
+                    <li><strong>EJECT No. (1t):</strong> ژمارەی لێدانەکانی دەرپەڕێنەر. لێرەدا لەسەر 1t دانراوە، واتە تەنها یەک جار دەچێتە پێشەوە و دەگەڕێتەوە.</li>
+                    <li><strong>VIB. EJT. No. (0t):</strong> ژمارەی لێدانە لەرزۆکەکان (Vibration). ئەمە بۆ ئەوەیە دەرپەڕێنەرەکە بلەرزێت بۆ ئەوەی بەرهەمەکە ئەگەر پێوەی نووسابێت، لێی ببێتەوە.</li>
+                </ul>
+
+                <h3>٢. بەشی چەپ: دەرپەڕاندن بەرەو دەرەوە (Eject Out)</h3>
+                <p>ئەم بەشە کۆنترۆڵی چوونە پێشەوەی دەرپەڕێنەر دەکات بۆ فڕێدانی بەرهەمەکە:</p>
+                <ul>
+                    <li><strong>Eject Out 1:</strong> قۆناغی یەکەمی چوونە پێشەوە. بەزۆری بە هێواشی دەست پێ دەکات بۆ ئەوەی زیان بە بەرهەمەکە نەگات.</li>
+                    <li><strong>Eject Out 2:</strong> قۆناغی دووەمی چوونە پێشەوە. دەکرێت خێراتر بێت بۆ ئەوەی بەرهەمەکە بە تەواوی فڕێ بدات.</li>
+                </ul>
+
+                <h3>٣. بەشی ڕاست: گەڕانەوەی دەرپەڕێنەر (Eject In)</h3>
+                <p>ئەم بەشە کۆنترۆڵی گەڕانەوەی دەرپەڕێنەر دەکات بۆ شوێنی خۆی پێش داخستنی قاڵب:</p>
+                <ul>
+                    <li><strong>Eject In 1:</strong> قۆناغی یەکەمی گەڕانەوە.</li>
+                    <li><strong>Eject In 2:</strong> قۆناغی دووەمی گەڕانەوە (کۆتایی گەڕانەوە).</li>
+                </ul>
+
+                <h3>٤. پارامێتەرەکانی ناو خشتەکە (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> خێرایی جووڵەی دەرپەڕێنەرەکە نیشان دەدات.</li>
+                    <li><strong>Pr. (Pressure):</strong> ئەو پەستانە هایدرۆلیکییە نیشان دەدات کە بۆ جووڵاندنی دەرپەڕێنەرەکە بەکارهاتوو.</li>
+                    <li><strong>Pos. (Position):</strong> شوێنی دەرپەڕێنەرەکە نیشان دەدات کە تێیدا قۆناغەکە دەگۆڕێت یان دەوەستێت.</li>
+                </ul>
+            `,
+            ar: `
+                <h2>إعدادات القاذف (Ejector Setting)</h2>
+                <p>تتحكم هذه الشاشة في كيفية تقدم ورجوع القاذف (Ejector):</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. الإعدادات العامة في الأعلى</h3>
+                <ul>
+                    <li><strong>Max. Stroke (265.0mm):</strong> أقصى مسافة يمكن للقاذف أن يتقدمها.</li>
+                    <li><strong>Eject Mode (Multi):</strong> وضع الطرد؛ مضبوط على Multi، مما يعني أن القاذف يمكنه التحرك لعدة مرات لضمان سقوط المنتج.</li>
+                    <li><strong>Eject In Aux:</strong> حركة القاذف المساعدة أثناء الرجوع.</li>
+                    <li><strong>EJECT PAUSE:</strong> وقت التوقف أو الراحة بين ضربات القاذف.</li>
+                    <li><strong>EJECT No. (1t):</strong> عدد ضربات القاذف؛ هنا مضبوط على 1t، أي يتقدم ويرجع مرة واحدة فقط.</li>
+                    <li><strong>VIB. EJT. No. (0t):</strong> عدد الضربات الاهتزازية (Vibration) لضمان انفصال المنتج إذا كان ملتصقاً.</li>
+                </ul>
+
+                <h3>2. القسم الأيسر: الطرد للخارج (Eject Out)</h3>
+                <p>يتحكم هذا القسم في تقدم القاذف لرمي المنتج:</p>
+                <ul>
+                    <li><strong>Eject Out 1:</strong> المرحلة الأولى للتقدم؛ تبدأ ببطء عادةً لحماية المنتج.</li>
+                    <li><strong>Eject Out 2:</strong> المرحلة الثانية للتقدم؛ يمكن أن تكون أسرع لضمان طرد المنتج تماماً.</li>
+                </ul>
+
+                <h3>3. القسم الأيمن: رجوع القاذف (Eject In)</h3>
+                <p>يتحكم هذا القسم في عودة القاذف إلى مكانه قبل إغلاق القالب:</p>
+                <ul>
+                    <li><strong>Eject In 1:</strong> المرحلة الأولى للرجوع.</li>
+                    <li><strong>Eject In 2:</strong> المرحلة الثانية للرجوع (نهاية الرجوع).</li>
+                </ul>
+
+                <h3>4. المعلمات في الجدول (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> سرعة حركة القاذف.</li>
+                    <li><strong>Pr. (Pressure):</strong> الضغط الهيدروليكي المستخدم لتحريك القاذف.</li>
+                    <li><strong>Pos. (Position):</strong> موضع القاذف حيث تتغير المرحلة أو يتوقف.</li>
+                </ul>
+            `,
+            en: `
+                <h2>Ejector Setting</h2>
+                <p>This screen controls the forward and backward movement of the Ejector:</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. General Settings (Top)</h3>
+                <ul>
+                    <li><strong>Max. Stroke (265.0mm):</strong> The maximum distance the ejector can move forward.</li>
+                    <li><strong>Eject Mode (Multi):</strong> Ejection mode; set to Multi, meaning the ejector can cycle multiple times to ensure the part is dropped.</li>
+                    <li><strong>Eject In Aux:</strong> Auxiliary ejector movement during retraction.</li>
+                    <li><strong>EJECT PAUSE:</strong> Pause or rest time between ejector strokes.</li>
+                    <li><strong>EJECT No. (1t):</strong> Number of ejector strokes; set to 1t, meaning it moves forward and back once.</li>
+                    <li><strong>VIB. EJT. No. (0t):</strong> Number of vibration strokes to shake the part off if it sticks.</li>
+                </ul>
+
+                <h3>2. Left Section: Eject Out</h3>
+                <p>Controls the forward movement of the ejector to expel the product:</p>
+                <ul>
+                    <li><strong>Eject Out 1:</strong> First forward stage; usually starts slowly to protect the part.</li>
+                    <li><strong>Eject Out 2:</strong> Second forward stage; can be faster to fully eject the part.</li>
+                </ul>
+
+                <h3>3. Right Section: Eject In</h3>
+                <p>Controls the return of the ejector to its home position before mold closing:</p>
+                <ul>
+                    <li><strong>Eject In 1:</strong> First return stage.</li>
+                    <li><strong>Eject In 2:</strong> Second return stage (End of return).</li>
+                </ul>
+
+                <h3>4. Table Parameters (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (Speed):</strong> Shows the movement speed of the ejector.</li>
+                    <li><strong>Pr. (Pressure):</strong> Shows the hydraulic pressure used to move the ejector.</li>
+                    <li><strong>Pos. (Position):</strong> The ejector position where the stage changes or stops.</li>
+                </ul>
+            `,
+            tr: `
+                <h2>İtici Ayarı (Ejector Setting)</h2>
+                <p>Bu ekran, iticinin (Ejector) ileri ve geri hareketini kontrol eder:</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. Üst Genel Ayarlar</h3>
+                <ul>
+                    <li><strong>Max. Stroke (265.0mm):</strong> İticinin ileri gidebileceği maksimum mesafe.</li>
+                    <li><strong>Eject Mode (Multi):</strong> İtici modu; Multi olarak ayarlandığında, ürünün düştüğünden emin olmak için birden fazla kez çalışabilir.</li>
+                    <li><strong>Eject In Aux:</strong> Geri dönüş sırasında yardımcı itici hareketi.</li>
+                    <li><strong>EJECT PAUSE:</strong> İtici vuruşları arasındaki duraklama veya dinlenme süresi.</li>
+                    <li><strong>EJECT No. (1t):</strong> İtici vuruş sayısı; 1t ayarı, bir kez ileri ve geri gideceği anlamına gelir.</li>
+                    <li><strong>VIB. EJT. No. (0t):</strong> Ürünün yapışması durumunda silkelenmesi için vibrasyon (titreşim) vuruş sayısı.</li>
+                </ul>
+
+                <h3>2. Sol Bölüm: Dışarı İtme (Eject Out)</h3>
+                <p>Ürünü fırlatmak için iticinin ileri hareketini kontrol eder:</p>
+                <ul>
+                    <li><strong>Eject Out 1:</strong> İlk ileri aşama; ürüne zarar vermemek için genellikle yavaş başlar.</li>
+                    <li><strong>Eject Out 2:</strong> İkinci ileri aşama; ürünün tamamen atılması için daha hızlı olabilir.</li>
+                </ul>
+
+                <h3>3. Sağ Bölüm: İtici Geri (Eject In)</h3>
+                <p>Kalıp kapanmadan önce iticinin başlangıç konumuna dönmesini kontrol eder:</p>
+                <ul>
+                    <li><strong>Eject In 1:</strong> İlk geri dönüş aşaması.</li>
+                    <li><strong>Eject In 2:</strong> İkinci geri dönüş aşaması (Dönüş sonu).</li>
+                </ul>
+
+                <h3>4. Tablo Parametreleri (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (Hız):</strong> İticinin hareket hızını gösterir.</li>
+                    <li><strong>Pr. (Basınç):</strong> İticiyi hareket ettirmek için kullanılan hidrolik basınç.</li>
+                    <li><strong>Pos. (Konum):</strong> Aşamanın değiştiği veya durduğu itici konumu.</li>
+                </ul>
+            `,
+            zh: `
+                <h2>顶针设置 (Ejector Setting)</h2>
+                <p>此屏幕控制顶针 (Ejector) 的前进和后退动作：</p>
+                <hr style="border:0.5px solid #444">
+
+                <h3>1. 顶部常规设置</h3>
+                <ul>
+                    <li><strong>Max. Stroke (265.0mm):</strong> 顶针允许前进的最大行程。</li>
+                    <li><strong>Eject Mode (Multi):</strong> 顶出模式；设置为 Multi，表示顶针可以多次往复以确保产品脱落。</li>
+                    <li><strong>Eject In Aux:</strong> 退回时的辅助顶针动作。</li>
+                    <li><strong>EJECT PAUSE:</strong> 顶针多次顶出之间的停顿时间。</li>
+                    <li><strong>EJECT No. (1t):</strong> 顶出次数；此处设置为 1t，即前进后退一次。</li>
+                    <li><strong>VIB. EJT. No. (0t):</strong> 振动顶出次数；用于抖落粘在模具上的产品。</li>
+                </ul>
+
+                <h3>2. 左侧部分：顶出 (Eject Out)</h3>
+                <p>控制顶针前进以弹出产品：</p>
+                <ul>
+                    <li><strong>Eject Out 1:</strong> 第一段前进；通常从慢速开始以保护产品。</li>
+                    <li><strong>Eject Out 2:</strong> 第二段前进；可以加快速度以确保产品完全脱出。</li>
+                </ul>
+
+                <h3>3. 右侧部分：顶退 (Eject In)</h3>
+                <p>控制顶针在合模前回到原位：</p>
+                <ul>
+                    <li><strong>Eject In 1:</strong> 第一段退回。</li>
+                    <li><strong>Eject In 2:</strong> 第二段退回（退毕）。</li>
+                </ul>
+
+                <h3>4. 表格参数 (Sp, Pr, Pos)</h3>
+                <ul>
+                    <li><strong>Sp. (速度):</strong> 显示顶针的运动速度。</li>
+                    <li><strong>Pr. (压力):</strong> 显示用于驱动顶针的液压压力。</li>
+                    <li><strong>Pos. (位置):</strong> 切换阶段或停止动作的顶针位置。</li>
+                </ul>
+            `
+        },
+
+        temp: { ku: "<h2>Temperature</h2>", ar: "<h2>الحرارة</h2>", en: "<h2>Temperature</h2>", tr: "<h2>Sıcaklık</h2>", zh: "<h2>温度设置</h2>" }
     };
 
-    function toggleDropdown(id) {
-        const list = document.getElementById(id);
-        const isOpen = list.classList.contains('show');
-        document.querySelectorAll('.dropdown-list').forEach(d => d.classList.remove('show'));
-        if(!isOpen) list.classList.add('show');
-    }
+    const translations = {
+        ku: { "nav-title": "ڕێکخستنی ئامێر", "btn-lang": "زمانەکان", "welcome-h": "بەخێرهاتیت", "welcome-p": "تکایە بەشێک هەڵبژێرە." },
+        ar: { "nav-title": "إعدادات الماكينة", "btn-lang": "اللغات", "welcome-h": "أهلاً بك", "welcome-p": "يرجى اختيار قسم." },
+        en: { "nav-title": "Machine Settings", "btn-lang": "Languages", "welcome-h": "Welcome", "welcome-p": "Please select a section." },
+        tr: { "nav-title": "Makine Ayarları", "btn-lang": "Diller", "welcome-h": "Hoş Geldiniz", "welcome-p": "Lütfen bir bölüm seçin." },
+        zh: { "nav-title": "机器设置", "btn-lang": "语言", "welcome-h": "欢迎", "welcome-p": "请选择一个部分。" }
+    };
 
-    function toggleSidebar() { 
-        document.getElementById('sidebar').classList.toggle('active'); 
-        if(!document.getElementById('sidebar').classList.contains('active')) {
-            document.querySelectorAll('.dropdown-list').forEach(d => d.classList.remove('show'));
-        }
+    function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
+    function toggleSub(id) { document.getElementById(id).classList.toggle('show'); }
+
+    function render(key) {
+        currentSection = key;
+        const sectionData = dataStore[key];
+        const content = (sectionData && sectionData[currentLang]) || "<h2>Under Construction</h2>";
+        document.getElementById('mainContent').innerHTML = content;
+        if(window.innerWidth < 768) toggleMenu();
     }
 
     function changeLanguage(lang) {
         currentLang = lang;
-        document.documentElement.lang = lang;
-        document.documentElement.dir = (lang === 'en' || lang === 'tr') ? 'ltr' : 'rtl';
-        const elements = document.querySelectorAll('[data-key]');
-        elements.forEach(el => {
+        const html = document.getElementById('htmlTag');
+        
+        // گۆڕینی ئاراستەی گشتی لاپەڕە
+        if (lang === 'ku' || lang === 'ar') {
+            html.dir = 'rtl';
+        } else {
+            html.dir = 'ltr';
+        }
+        
+        // نوێکردنەوەی دەقەکان
+        document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
             if (translations[lang][key]) el.innerText = translations[lang][key];
         });
-        update();
-        toggleSidebar();
-    }
 
-    function changeSound(id, preview = false) {
-        selectedSound = id;
-        document.querySelectorAll('#soundList .sub-btn').forEach(b => b.classList.remove('active-item'));
-        document.getElementById('s' + id).classList.add('active-item');
-        if(preview) playAlertSound();
+        if (currentSection) render(currentSection);
+        else {
+            document.getElementById('mainContent').innerHTML = `<h2>${translations[lang]['welcome-h']}</h2><p>${translations[lang]['welcome-p']}</p>`;
+        }
+        toggleMenu();
     }
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playAlertSound() {
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        
-        if(selectedSound === 1) {
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
-        } else if(selectedSound === 2) {
-            oscillator.type = 'square';
-            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-        } else {
-            oscillator.type = 'triangle';
-         
+</script>
+</body>
+</html>
